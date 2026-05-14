@@ -1,0 +1,51 @@
+[core]
+reloadable = true
+order = 0
+
+[package]
+version = "1.0.9"
+category = "Simulation"
+title = "Isaac Sim UI Utilities"
+description = "Core UI Elements for Isaac Sim"
+authors = ["NVIDIA"]
+repository = ""
+keywords = ["isaac", "ui",]
+changelog = "docs/CHANGELOG.md"
+readme = "docs/README.md"
+preview_image = "data/preview.png"
+icon = "data/icon.png"
+writeTarget.kit = true
+
+[dependencies]
+"omni.kit.uiapp" = {}
+"omni.kit.ui_test" = {}
+"omni.kit.menu.utils" = {}
+"omni.kit.window.extensions" = {}
+"omni.kit.window.property" = {}
+"omni.kit.window.filepicker" = {}
+"omni.kit.pip_archive" = {} # pulls in pyperclip
+"omni.graph" = {}
+"omni.graph.action" = {}
+"omni.graph.visualization.nodes" = {}
+"omni.kit.property.usd" = {}
+"omni.physx" = {}
+
+[[python.module]]
+name = "isaacsim.gui.components"
+
+[[python.module]]
+name = "isaacsim.gui.components.tests"
+
+[[test]]
+
+dependencies = [
+    "omni.hydra.rtx",                       # "omni.hydra.pxr", Can we run and pass with Storm ?
+    "omni.kit.viewport.utility",
+    "omni.kit.viewport.window",
+    "isaacsim.storage.native",
+    "isaacsim.core.api",
+    "isaacsim.core.utils"
+]
+args = [
+    '--/persistent/isaac/asset_root/default = "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/4.5"',
+]

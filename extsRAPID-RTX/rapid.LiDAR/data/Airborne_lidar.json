@@ -1,0 +1,49 @@
+{
+   "class": "sensor",
+   "type": "lidar",
+   "name": "Example Rotary",
+   "driveWorksId": "GENERIC",
+   "profile": {
+      "scanType": "rotary",
+      "intensityProcessing": "normalization",
+      "rotationDirection": "CW",
+      "rayType": "IDEALIZED",
+      "nearRangeM": 1.0,
+      "farRangeM": 200.0,
+      "startAzimuthOffsetDeg": 0.0,
+      "rangeResolutionM": 0.004,
+      "rangeAccuracyM": 0.02,
+      "avgPowerW": 0.002,
+      "minReflectance": 0.1,
+      "minReflectanceRange": 120.0,
+      "wavelengthNm": 903.0,
+      "pulseTimeNs": 6,
+      "azimuthErrorMean": 0.0,
+      "azimuthErrorStd": 0.015,
+      "elevationErrorMean": 0.0,
+      "elevationErrorStd": 0.0,
+      "maxReturns": 2,
+      "scanRateBaseHz": 100,
+      "reportRateBaseHz": 100000.0,
+      "numberOfEmitters": 1,
+      "emitterStateCount": 1,
+      "emitterStates": [
+         {
+            "azimuthDeg": [
+               0
+            ],
+            "elevationDeg": [
+               0
+            ],
+            "fireTimeNs": [
+               0
+            ]
+         }
+      ],
+      "intensityMappingType": "LINEAR",
+      "validStartAzimuthDeg": 320.0,
+      "validEndAzimuthDeg": 40.0,
+      "effectiveApertureSize": 0.1,
+      "quantumEfficiency": 0.95
+   }
+}

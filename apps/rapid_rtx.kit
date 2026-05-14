@@ -1,0 +1,209 @@
+[package]
+title = "RAPID-RTX"
+description = "RAPID-RTX Application"
+version = "1.0"
+execFile = "isaac-sim"
+keywords = ["experience", "app", "usd", "isaacsim"] # That makes it browsable in UI with "experience" filter
+
+
+[dependencies]
+"isaacsim.exp.base" = {}
+"omni.kit.window.splash" = {}  # 
+
+# Additional Isaac Sim extensions
+"isaacsim.app.setup" = { order = 1000 }
+"isaacsim.asset.gen.omap" = {}
+"isaacsim.asset.gen.omap.ui" = {}
+"isaacsim.asset.importer.heightmap" = {}
+"isaacsim.asset.validation" = {}
+"isaacsim.examples.extension" = {}
+"isaacsim.examples.interactive" = {}
+"isaacsim.gui.components" = {}
+"isaacsim.examples.browser" = {}
+"isaacsim.replicator.behavior.ui" = {}
+"isaacsim.replicator.grasping.ui" = {}
+"isaacsim.replicator.scene_blox" = {}
+"isaacsim.replicator.synthetic_recorder" = {}
+"isaacsim.robot.manipulators.examples" = {}
+"isaacsim.robot.manipulators.ui" = {}
+"isaacsim.robot.surface_gripper.ui" = {}
+"isaacsim.robot.wheeled_robots.ui" = {}
+"isaacsim.robot_setup.assembler" = {}
+"isaacsim.robot_setup.gain_tuner" = {}
+"isaacsim.robot_setup.grasp_editor" = {}
+"isaacsim.robot_setup.xrdf_editor" = {}
+"isaacsim.sensors.camera.ui" = {}
+"isaacsim.sensors.physics.examples" = {}
+"isaacsim.sensors.physics.ui" = {}
+"isaacsim.sensors.physx.examples" = {}
+"isaacsim.sensors.physx.ui" = {}
+"isaacsim.sensors.rtx.ui" = {}
+"isaacsim.util.camera_inspector" = {}
+"isaacsim.util.merge_mesh" = {}
+"isaacsim.util.physics" = {}
+"omni.isaac.block_world" = {}
+"omni.isaac.extension_templates" = {}
+"omni.isaac.gain_tuner" = {}
+"omni.isaac.grasp_editor" = {}
+"omni.isaac.occupancy_map.ui" = {}
+"omni.isaac.occupancy_map" = {}
+"omni.isaac.physics_inspector" = {}
+"omni.isaac.range_sensor.examples" = {}
+"omni.isaac.range_sensor.ui" = {}
+"omni.isaac.robot_assembler" = {}
+"omni.isaac.robot_description_editor" = {}
+"omni.isaac.scene_blox" = {}
+"omni.isaac.synthetic_recorder" = {}
+"omni.isaac.throttling" = {}
+
+# Additional Kit extensions
+"omni.anim.curve.bundle" = {}
+"omni.physx.asset_validator" = {}
+"omni.asset_validator.ui" = { order = 2000 }
+"omni.anim.shared.core" = {}
+"omni.graph.bundle.action" = {}
+"omni.graph.visualization.nodes" = {}
+"omni.graph.window.action" = {}
+"omni.graph.window.generic" = {}
+"omni.importer.onshape" = {}
+"omni.kit.actions.window" = {}
+"omni.kit.asset_converter" = {}
+"omni.kit.browser.asset" = {}
+"omni.kit.browser.material" = {}
+"omni.kit.collaboration.channel_manager" = {}
+"omni.kit.context_menu" = {}
+"omni.kit.widget.schema_api" = {}
+"omni.kit.graph.delegate.default" = {}
+"omni.kit.hotkeys.window" = {}
+"omni.kit.manipulator.transform" = {}
+"omni.kit.mesh.raycast" = {}
+"omni.kit.preferences.animation" = {}
+"omni.kit.profiler.window" = { order = 2000 }
+"omni.kit.property.collection" = {}
+"omni.kit.property.layer" = {}
+"omni.kit.quicklayout" = {}
+"omni.kit.renderer.capture" = {}
+"omni.kit.renderer.core" = {}
+"omni.kit.scripting" = {}
+"omni.kit.search.files" = {}
+"omni.kit.selection" = {}
+"omni.kit.stage.copypaste" = {}
+"omni.kit.stage.mdl_converter" = {}
+"omni.kit.stage_column.payload" = {}
+"omni.kit.stage_column.variant" = {}
+"omni.kit.stage_templates" = {}
+"omni.kit.stagerecorder.bundle" = {}
+"omni.kit.tool.asset_exporter" = {}
+"omni.kit.tool.remove_unused.controller" = {}
+"omni.kit.tool.remove_unused.core" = {}
+"omni.kit.uiapp" = {}
+"omni.kit.usda_edit" = {}
+"omni.kit.variant.editor" = {}
+"omni.kit.variant.presenter" = {}
+"omni.kit.viewport.actions" = {}
+"omni.kit.viewport.bundle" = {}
+"omni.kit.viewport.rtx" = {}
+"omni.kit.viewport_widgets_manager" = {}
+"omni.kit.widget.cache_indicator" = {}
+"omni.kit.widget.collection" = {}
+"omni.kit.widget.extended_searchfield" = {}
+"omni.kit.widget.filebrowser" = {}
+"omni.kit.widget.layers" = {}
+"omni.kit.widget.live" = {}
+"omni.kit.widget.timeline" = {}
+"omni.kit.widget.versioning" = {}
+"omni.kit.widgets.custom" = {}
+"omni.kit.window.collection" = {}
+"omni.kit.window.commands" = {}
+"omni.kit.window.cursor" = {}
+"omni.kit.window.extensions" = {}
+"omni.kit.window.file" = {}
+"omni.kit.window.filepicker" = {}
+"omni.kit.window.material" = {}
+"omni.kit.window.material_graph" = {}
+"omni.kit.window.preferences" = {}
+"omni.kit.window.quicksearch" = {}
+"omni.kit.window.script_editor" = {}
+"omni.kit.window.stats" = { order = 1000 }
+"omni.kit.window.title" = {}
+"omni.kit.window.usd_paths" = {}
+"omni.physx.bundle" = {}
+"omni.resourcemonitor" = {}
+"omni.simready.explorer" = {}
+"omni.stats" = {}
+"omni.usd.metrics.assembler.physics" = {}
+"omni.usd.schema.scene.visualization" = {}
+"omni.kit.language.core" = {}
+"omni.kit.language.simplified_chinese" = {}  # 启动简体中文
+
+# RAPID-RTX extensions
+"rapid.SplashScreen" = { order = -5000 }
+"rapid.Layout" = { version = "1.0.0" }
+"rapid.SceneConstruction" = { version = "1.0.0" }
+"rapid.Support" = { version = "1.0.0" }
+"rapid.Observation" = { version = "1.0.0" }
+"rapid.Simulation" = { version = "1.0.0" }
+"rapid.LiDAR" = { version = "1.0.0" }
+"rapid.ReflectanceDatabase" = { version = "1.0.0" }
+"rapid.Property" = { version = "1.0.0" }
+"rapid.NewProject" = { version = "1.0.0" }
+# "rapid.ExampleScene" = { version = "1.0.0" }
+"rapid.Tools" = { version = "1.0.0" }
+# "rapid.DataAssimilation" = { version = "1.0.0" }
+
+
+
+
+[dependencies."filter:platform"."windows-x86_64"] # (Filtered for x86_64 platforms)
+"omni.kit.converter.cad" = {order = 200, version = "205.0.0", exact = true}
+
+[dependencies."filter:platform"."linux-x86_64"] # (Filtered for x86_64 platforms)
+"omni.kit.converter.cad" = {order = 200, version = "205.0.0", exact = true}
+
+[settings]
+# default internal ros2 bridge distro to use if no ros2 distro is sourced
+exts."isaacsim.ros2.bridge".ros_distro = "system_default"
+# enable async rendering runtime toggle
+exts."isaacsim.core.throttling".enable_async = true
+# enable manual mode runtime toggle
+exts."isaacsim.core.throttling".enable_manualmode = true
+# 启动图路径，相对于应用目录的相对路径
+exts."omni.kit.window.splash".imagePath = "${app}/../extsRAPID-RTX/rapid.SplashScreen/data/splash_screen.png"
+
+
+[settings.app]
+name = "RAPID-RTX"
+version = "1.0"
+file.ignoreUnsavedOnExit = false
+window.title = "RAPID-RTX"
+vulkan = false                          # Explicitly enable Vulkan
+enableDeveloperWarnings = false        # Disable developer warnings to reduce log noise
+runLoops.main.rateLimitEnabled = true  # Enable rate limiting, simulation runs at specified rendering rate (default 60 hz)
+runLoops.main.manualModeEnabled = false # Enable manual mode, dt is fixed at requested rate
+player.useFixedTimeStepping = true     # Disable fixed time stepping, dt is controlled by loop runner
+
+
+# set the default ros bridge to enable on startup
+[settings."filter:platform"."windows-x86_64"]
+isaac.startup.ros_bridge_extension = ""
+[settings."filter:platform"."linux-x86_64"]
+isaac.startup.ros_bridge_extension = "isaacsim.ros2.bridge"
+[settings."filter:platform"."linux-aarch64"]
+isaac.startup.ros_bridge_extension = "isaacsim.ros2.bridge"
+
+[settings.app.exts.folders]
+'++' = [
+    "${app}",
+    "${app}/../exts",
+    "${app}/../extscache",
+    "${app}/../extsUser",
+    "${app}/../extsDeprecated",
+    "${app}/../extsRAPID-RTX",
+]
+
+[settings.exts."omni.kit.registry.nucleus"]
+registries = [
+	{ name = "kit/default", url = "https://ovextensionsprod.blob.core.windows.net/exts/kit/prod/107/shared" },
+	{ name = "kit/sdk", url = "https://ovextensionsprod.blob.core.windows.net/exts/kit/prod/sdk/${kit_version_short}/${kit_git_hash}" },
+	{ name = "kit/community", url = "https://dw290v42wisod.cloudfront.net/exts/kit/community" },
+]

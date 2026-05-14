@@ -1,0 +1,21 @@
+{
+    "Observation": {
+        "sensor_stage_path": "/World/sensor"
+    },
+    "ReflectanceDatabase": {
+        "birch_leaf_green": {
+            "ref": [0.0411, 0.0426, 0.0586, 0.1075, 0.478],
+            "tra": [0.0005, 0.0107, 0.0563, 0.122, 0.4822]
+        },
+        "birch_branch": {
+            "ref": [0.0692, 0.0798, 0.1052, 0.1768],
+            "tra": [0.0, 0.0, 0.0, 0.0]
+        },
+        "soil_dry": {
+            "ref": [0.0484, 0.0572, 0.0804, 0.1327, 0.4672],
+            "tra": [0.0, 0.0, 0.0, 0.0, 0.0]
+        }
+    },
+    "ReflectanceDatabase_bands": "400:1,500:1,600:1,700:1,800:1",
+    "spectra_data_info": []
+}

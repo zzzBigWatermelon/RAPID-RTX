@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below. RAPID-RTX is built on NVIDIA Isaac Sim."
+authors:
+  - family-names: "Zhang"
+    given-names: "Zhuangzhuang"
+    orcid: "https://orcid.org/0009-0004-0780-4148"
+  - family-names: "Huang"
+    given-names: "Huaguo"
+title: "RAPID-RTX: A High-Performance 3D Radiative Transfer Model Simulation Platform"
+version: "1.0.0"
+doi: 10.1109/TGRS.2025.3633556
+date-released: 2025-05-14
+url: "https://github.com/zzzBigWatermelon/RAPID-RTX"
+repository: "https://github.com/zzzBigWatermelon/RAPID-RTX"
+references:
+  - type: software
+    title: "Isaac Sim"
+    authors:
+      - name: "NVIDIA"
+    version: "5.1.0"
+    year: 2024
+    url: "https://github.com/isaac-sim/IsaacSim"
+    notes: "RAPID-RTX is built upon NVIDIA Isaac Sim."

@@ -1,0 +1,19 @@
+{
+    "SceneConstruction": {
+        "select_sun_light_path": "/Light/Sun_Light",
+        "select_sky_light_path": "/Light/Sky_Light",
+        "light_look_at_target": [0.0, 0.0, 0.0],
+        "light_zenith_and_azimuth": [45.0, 0.0],
+        "terrain_type_model": "Simple Plane",
+        "terrain_extent_models": [100.0, 100.0],
+        "import_asset_model": "",
+        "select_stage_prim_model": "",
+        "distribution_type_model": "Random",
+        "instancing_mode_model": "PrimInstancing",
+        "distribution_number_model": 1000,
+        "distribution_extent_model": [100.0, 100.0],
+        "import_positon_model_folder": "",
+        "import_positon_data_file": "",
+        "import_dem_mesh_file": ""
+    }
+}

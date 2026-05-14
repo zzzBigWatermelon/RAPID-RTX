@@ -1,0 +1,97 @@
+{
+    "Observation": {
+        "sensor_stage_path": "/World/sensor"
+    },
+    "ReflectanceDatabase": {
+        "birch_leaf_green": {
+            "ref": [0.041, 0.0425, 0.0585, 0.1075],
+            "tra": [0.0005, 0.0106, 0.0563, 0.122],
+            "display_color": [0.101, 0.324, 0.021]
+        },
+        "birch_branch": {
+            "ref": [0.0692, 0.0798, 0.1052, 0.1768],
+            "tra": [0.0, 0.0, 0.0, 0.0],
+            "display_color": [0.243, 0.179, 0.014]
+        },
+        "soil_dry": {
+            "ref": [0.0484, 0.0572, 0.0804, 0.1327, 0.4672],
+            "tra": [0.0, 0.0, 0.0, 0.0, 0.0],
+            "display_color": [0.232, 0.125, 0.013]
+        }
+    },
+    "ReflectanceDatabase_bands": "400:1,500:1,600:1,700:1,800:1",
+    "spectra_data_info": [
+    {
+        "name": "ACERCA_leaf_green",
+        "category": ["Vegetation", "Leaf"],
+        "file": "ACERCA_leaf_green.csv",
+        "wavelength_range": [400, 2500],
+        "unit": "nm",
+        "description": "Data sourced from the 2015 Wytahm forest scene."
+    },
+    {
+        "name": "ACERCA_wood",
+        "category": ["Vegetation", "Wood"],
+        "file": "ACERCA_wood.csv",
+        "wavelength_range": [400, 2500],
+        "unit": "nm",
+        "description": "Data sourced from the 2015 Wytahm forest scene."
+    },
+    {
+        "name": "soil_dry",
+        "category": ["Soil"],
+        "file": "soil_dry.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the 2015 Wytahm forest scene."
+    },
+    {
+        "name": "birch_leaf_green",
+        "category": ["Vegetation", "Leaf"],
+        "file": "birch_leaf_green.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the LESS."
+    },
+    {
+        "name": "birch_branch",
+        "category": ["Vegetation", "Wood"],
+        "file": "birch_branch.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the LESS."
+    },
+    {
+        "name": "larch_leaf_green",
+        "category": ["Vegetation", "Leaf"],
+        "file": "larch_leaf_green.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the LESS."
+    },
+    {
+        "name": "larch_branch",
+        "category": ["Vegetation", "Wood"],
+        "file": "larch_branch.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the LESS."
+    },
+    {
+        "name": "mollisol_soil_dark",
+        "category": ["Soil"],
+        "file": "mollisol_soil_dark.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the LESS."
+    },
+    {
+        "name": "BART_soil",
+        "category": ["Soil"],
+        "file": "BART_soil.csv",
+        "wavelength_range": [400, 900],
+        "unit": "nm",
+        "description": "Data sourced from the LESS."
+    }
+    ]
+}

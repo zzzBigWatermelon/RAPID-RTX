@@ -1,0 +1,4 @@
+# [rapid.Tools]
+
+Utility tools.
+

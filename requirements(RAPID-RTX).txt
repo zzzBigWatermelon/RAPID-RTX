@@ -1,0 +1,5 @@
+# --- 核心第三方库 ---
+spectral
+pandas
+tifffile
+laspy
