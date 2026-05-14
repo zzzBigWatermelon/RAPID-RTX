@@ -49,7 +49,7 @@ Double-click RAPID-RTX.exe to run the program.
 ## Citation
 
 - When using RAPID-RTX in your work, please cite:Z. Zhang, Y. Li, C. Liu and H. Huang, "RAPID-RTX: A Novel Real-Time Radiative Transfer and Force Field Modeling Framework for Forest BRF Simulations," in *IEEE Transactions on Geoscience and Remote Sensing*, vol. 63, pp. 1-14, 2025, Art no. 4423214, doi: 10.1109/TGRS.2025.3633556.
-- To cite RAPID-RTX, click on "Cite this repository" in the right sidebar of the [Isaac Sim GitHub repository](https://github.com/isaac-sim/IsaacSim) landing page and select one of the listed citation entries.
+- To cite RAPID-RTX, click on "Cite this repository" in the right sidebar of the [RAPID-RTX GitHub repository](https://github.com/zzzBigWatermelon/RAPID-RTX) landing page and select one of the listed citation entries.
 
 ## License
 
