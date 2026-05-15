@@ -2,7 +2,7 @@
 
 # RAPID-RTX
 
-RAPID-RTX is a high-performance 3D radiative transfer model (RTM) simulation platform built on NVIDIA Isaac Sim. It leverages RTX and OpenUSD technologies to support multiple 3D formats, including USD, OBJ, FBX, and PLY. Developed in Python and C++, RAPID-RTX enables the simulation of diverse remote sensing datasets and the generation of high-fidelity images within large, complex 3D environments. The platform features GPU-accelerated ray tracing, physics‑based force field simulation (planned for v1.1.0), and multi‑sensor simulation including optical and LiDAR (point cloud/full waveform), with SAR support planned for v1.1.0. In addition, RAPID-RTX supports multi‑angle and multispectral observations, providing an end‑to‑end solution for remote sensing simulation.
+RAPID-RTX is a high-performance 3D radiative transfer model (RTM) simulation platform built on NVIDIA Isaac Sim. It leverages RTX and OpenUSD technologies to support multiple 3D formats, including USD, OBJ, FBX, and PLY. Developed in Python, RAPID-RTX enables the simulation of diverse remote sensing datasets and the generation of high-fidelity images within large, complex 3D environments. The platform features GPU-accelerated ray tracing, physics‑based force field simulation (planned for v1.1.0), and multi‑sensor simulation including optical and LiDAR (point cloud/full waveform), with SAR support planned for v1.1.0. In addition, RAPID-RTX supports multi‑angle and multispectral observations, providing an end‑to‑end solution for remote sensing simulation.
 
 ## Prerequisites and Environment Setup
 
@@ -41,7 +41,7 @@ Double-click RAPID-RTX.exe to run the program.
 
 ## Support
 
-- Please use GitHub [Discussions](https://github.com/isaac-sim/IsaacSim/discussions) for discussing ideas, asking questions, and requests for new features.
+- Please use GitHub [Discussions](https://github.com/zzzBigWatermelon/RAPID-RTX/discussions) for discussing ideas, asking questions, and requests for new features.
 - For any questions, suggestions, or to seek cooperation, please contact me via the following email address: zzz_zhang666@163.com;huaguo_huang@bjfu.edu.cn
 - Video tutorials (Chinese):https://space.bilibili.com/345754400?spm_id_from=333.1007.0.0
 - User Manual: After opening the program, please select User Manual from the support menu in the upper left corner.
@@ -53,6 +53,6 @@ Double-click RAPID-RTX.exe to run the program.
 
 ## License
 
-RAPID-RTX is licensed under the Apache License, Version 2.0.  See the [LICENSE](LICENSE) file for details.
+RAPID-RTX is licensed under the Apache License, Version 2.0.  See the LICENSE(RAPID-RTX ) file for details.
 
 **Note**: RAPID-RTX depends on NVIDIA Isaac Sim, also distributed under the Apache 2.0 License.  
