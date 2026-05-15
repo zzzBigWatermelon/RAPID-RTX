@@ -33,8 +33,9 @@
 ::978f952a14a936cc963da21a135fa983
 @echo off
 setlocal
-:: Configure Python to use UTF-8 mode
+:: 启用 UTF-8
 set PYTHONUTF8=1
+:: 切换目录
 cd /d "%~dp0"
 set SCRIPT_DIR=%~dp0
 
@@ -42,16 +43,41 @@ echo ====================================================
 echo   RAPID-RTX bootloader (Environment Check)
 echo ====================================================
 
-REM Run the installation script
-if exist "%SCRIPT_DIR%python.bat" (
-    call "%SCRIPT_DIR%python.bat" "%SCRIPT_DIR%setup_RAPID-RTX.py"
-)
+REM --- 1. 检 ?python.bat 是否存在 ---
+if not exist "%SCRIPT_DIR%python.bat" goto :NoPython
 
-REM Start the main program.
-if exist "%SCRIPT_DIR%.deps_installed" (
-    echo [Launch] Starting RAPID-RTX Platform...
-    call "%SCRIPT_DIR%kit\kit.exe" "%%~dp0apps/rapid_rtx.kit" %*
-) else (
-    echo [Error] Environment setup failed.
-    pause
-)
+REM --- 2. 检查并运行安装脚本 ---
+if not exist "%SCRIPT_DIR%setup_RAPID-RTX.py" goto :NoSetup
+echo [Step 1/2] Checking Python dependencies...
+call "%SCRIPT_DIR%python.bat" "%SCRIPT_DIR%setup_RAPID-RTX.py"
+
+REM --- 3. 验证安装是否成功 (检查哨兵文 ? ---
+if not exist "%SCRIPT_DIR%.deps_installed" goto :InstallError
+
+REM --- 4. 启动程序 (避开 IF 括号 ? ---
+echo [Step 2/2] [Launch] Starting RAPID-RTX Platform...
+:: 注意：这里直接使用变量，不要包裹 ?if  ?() 内部
+call "%SCRIPT_DIR%kit\kit.exe" "%SCRIPT_DIR%apps\rapid_rtx.kit" %*
+goto :End
+
+:NoPython
+echo [Error] python.bat not found in: "%SCRIPT_DIR%"
+pause
+goto :End
+
+:NoSetup
+echo [Note] setup_RAPID-RTX.py not found, skipping dependency checks.
+goto :LaunchAnyway
+
+:InstallError
+echo [Error] Environment setup failed. Please check the logs above.
+pause
+goto :End
+
+:LaunchAnyway
+echo [Launch] Starting RAPID-RTX Platform (without check)...
+call "%SCRIPT_DIR%kit\kit.exe" "%SCRIPT_DIR%apps\rapid_rtx.kit" %*
+goto :End
+
+:End
+echo [Status] RAPID-RTX App is closed.
