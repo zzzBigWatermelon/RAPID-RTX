@@ -4,7 +4,16 @@
 
 # RAPID-RTX
 
-RAPID-RTX is a high-performance 3D radiative transfer model (RTM) simulation platform built on NVIDIA Isaac Sim. It leverages RTX and OpenUSD technologies to support multiple 3D formats, including USD, OBJ, FBX, and PLY. Developed in Python, RAPID-RTX enables the simulation of diverse remote sensing datasets and the generation of high-fidelity images within large, complex 3D environments. The platform features GPU-accelerated ray tracing, physics‑based force field simulation (planned for v1.1.0), and multi‑sensor simulation including optical and LiDAR (point cloud/full waveform), with SAR support planned for v1.1.0. In addition, RAPID-RTX supports multi‑angle and multispectral observations, providing an end‑to‑end solution for remote sensing simulation.
+RAPID-RTX is a high-performance 3D Radiative Transfer Model (RTM) simulation platform based on NVIDIA Isaac Sim. Developed in Python, it supports the rapid generation of high-fidelity remote sensing imagery and point cloud data in large and complex 3D environments. The platform integrates a GPU-accelerated ray tracing engine, possessing multi-sensor, multi-angle, and multispectral simulation capabilities, covering mainstream remote sensing payloads such as optical and lidar (point cloud/full waveform). It also includes a built-in AI-driven scene generation module, significantly improving simulation efficiency and scene diversity.
+
+Future version plans: v1.1.0 will introduce physics-based force field simulation and SAR simulation support, and plans to upgrade the underlying system to the latest Isaac Sim version to further improve simulation accuracy and platform compatibility.
+
+## Key Features
+
+- **AI-Driven Scene Generation**：Leverage natural language to build complex forest scenes with automated tool orchestration and customizable parameters.
+- **Multi-Sensor Simulation**：Support optical sensors and LiDAR (point cloud / full-waveform) with multi-angle and multi-spectral capabilities.
+- **RTX-Accelerated Ray Tracing**：High-performance GPU-accelerated rendering for high-fidelity image and point cloud generation in large-scale environments.
+- **Physics-Based Simulation**：The plan supports physics-based force field simulation.
 
 ## Prerequisites and Environment Setup
 
@@ -37,7 +46,7 @@ Unzip the Isaac Sim archive, then copy all files from RAPID-RTX to the Isaac Sim
 
 Double-click RAPID-RTX.exe to run the program.
 
-- **⚠️ Startup Time** The first time loading Isaac Sim may take up to several minutes as Extensions and Shader are loaded and cached. The subsequent startup time should be in the ranges of 10-30 seconds depending on hardware configuration.
+- **⚠️ Startup Time** When RAPID-RTX is loaded for the first time, the system will automatically download the necessary dependencies, which may take several minutes. Please ensure a stable network connection. After the initial load is complete, subsequent startup times are typically between 10 and 30 seconds (depending on hardware configuration).
 - **⚠️Installation Path Length Limit**: Windows limits path length to 260 characters. If you encounter missing files or other build errors, try moving the repository to a shorter path. It is recommended to use decompression software such as Bandizip instead of the Windows system decompression.
 - ⚠️**Installation path requirements**: Do not include Chinese characters, spaces, or special characters such as &.
 - **⚠️License Terms**: If this is your first time building/loading RAPID-RTX, you will be prompted to accept the Omniverse license terms.
