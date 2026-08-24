@@ -183,8 +183,8 @@ def get_spectrum_data_for_bands(spectra_file_path, bands_str):
     return ref_str, tra_str
 
 
-def load_all_spectra_data(default_parameters_path, project_parameters_path):
-    """扫描默认库和项目库中的 simulation_parameters.json, 读取其中的内容
+def read_spectra_file_path(default_parameters_path, project_parameters_path):
+    """扫描默认库和项目库中的 simulation_parameters.json, 读取其中的光谱文件路径
     参数:
         default_parameters_path (str):
         project_parameters_path (str):"""
@@ -193,11 +193,13 @@ def load_all_spectra_data(default_parameters_path, project_parameters_path):
     for config_path in config_paths:
         if os.path.exists(config_path):
             with open(config_path, 'r', encoding='utf-8') as f:
+                # 读取parameters.json文件，后面获取spectra_database文件名字
                 data = json.load(f)
-                # 获取当前 JSON 所在的目录
+                # 获取当前 JSON文件/spectra_database 所在的根文件夹
                 base_dir = Path(config_path).parent
 
                 for item in data.get("spectra_data_info", []):
+                    # 获取spectra_database文件路径
                     # 拼接并检查 .csv 文件的物理存在性
                     csv_path = (base_dir / "spectra_database" / item["file"]).resolve()
 
@@ -206,7 +208,7 @@ def load_all_spectra_data(default_parameters_path, project_parameters_path):
                         # 如果项目库中有同名 item['name']，它会在此处自动覆盖默认库的路径。
                         spectra_database[item['name']] = {
                             "csv_path": csv_path.as_posix(),
-                            "metadata": item
+                            "metadata": item  # 其他信息
                         }
     return spectra_database
 

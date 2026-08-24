@@ -1,0 +1,322 @@
+{
+  "Agave": {
+    "common_name": "龙舌兰",
+    "type": ["succulent", "evergreen"],
+    "model_path": "nvidia_official/Agave.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Agave", "leaves", "foliage"],
+      "trunk": []},
+    "description": "Genus of succulents with thick, fleshy leaves in rosette formation, often with spines on leaf margins. Native to arid and semi-arid regions of the Americas. Highly drought-tolerant and thrives in poor soils.",
+    "height_range": [0.5, 3.0],
+    "lai_range": [1.0, 3.0],
+    "density_range": [1000, 5000],
+    "terrain_preference": ["desert", "rocky_slope", "coastal"]
+  },
+  "American_Beech": {
+    "common_name": "美国山毛榉",
+    "type": ["tree", "broadleaf", "deciduous"],
+    "model_path": "nvidia_official/American_Beech.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaf", "leaves", "foliage"],
+      "trunk": ["trunk", "branch", "bark"]},
+    "description": "Large deciduous tree native to eastern North America with smooth gray bark and broad, spreading crown. Produces edible beechnuts. A dominant climax species in mature hardwood forests.",
+    "height_range": [20.0, 35.0],
+    "lai_range": [4.0, 6.0],
+    "density_range": [100, 300],
+    "terrain_preference": ["flat", "gentle_slope", "valley"]
+  },
+  "Australian_Tree_Fern": {
+    "common_name": "澳大利亚树蕨",
+    "type": ["fern", "tree"],
+    "model_path": "nvidia_official/Australian_Tree_Fern.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["grass", "fronds", "foliage"],
+      "trunk": ["branches", "trunk", "oldbranches"]},
+    "description": "Tropical tree fern with a single slender trunk and graceful, arching fronds. Grows rapidly in moist, shaded environments. Popular for creating tropical garden aesthetics.",
+    "height_range": [5.0, 10.0],
+    "lai_range": [3.0, 5.0],
+    "density_range": [500, 1500],
+    "terrain_preference": ["shaded", "riparian", "tropical"]
+  },
+  "Barberry": {
+    "common_name": "小檗",
+    "type": ["shrub", "deciduous", "ornamental"],
+    "model_path": "nvidia_official/Barberry.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Barberry_stem2_instancer", "Barberry_stem3_instancer", "Barberry_stem1_instancer"],
+      "trunk": []},
+    "description": "Deciduous or evergreen shrubs with thorny branches and small yellow flowers in spring. Produces bright red berries in autumn. Commonly used for hedges and ornamental plantings.",
+    "height_range": [1.0, 3.0],
+    "lai_range": [2.0, 4.0],
+    "density_range": [1000, 4000],
+    "terrain_preference": ["flat", "slope", "urban"]
+  },
+  "Black_Oak": {
+    "common_name": "黑栎",
+    "type": ["tree", "broadleaf", "deciduous"],
+    "model_path": "nvidia_official/Black_Oak.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Black_Oak_branch1jEI", "Black_Oak_branch1pR3", "Black_Oak_branch1m4u", "Black_Oak_branch1snf", "Black_Oak_branch1"],
+      "trunk": ["Black_Oak_base", "Black_Oak_branch2", "Black_Oak_branch3", "Black_Oak_branch4", "Black_Oak_branch5", "Black_Oak_branch6"]},
+    "description": "Medium-sized deciduous oak native to eastern North America with dark, deeply furrowed bark. Leaves have deep lobes and turn yellow in autumn. Prefers well-drained upland sites.",
+    "height_range": [18.0, 25.0],
+    "lai_range": [4.0, 6.0],
+    "density_range": [100, 300],
+    "terrain_preference": ["flat", "gentle_slope", "upland"]
+  },
+  "Blue_Berry_Elder": {
+    "common_name": "蓝接骨木",
+    "type": ["shrub", "deciduous", "fruit"],
+    "model_path": "nvidia_official/Blue_Berry_Elder.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaf", "leaves", "foliage"],
+      "trunk": ["trunk", "branch", "bark"]},
+    "description": "Fast-growing large deciduous shrub or small tree with white flat-topped flower clusters in spring. Produces blue-black berries that are an important food source for wildlife.",
+    "height_range": [2.0, 6.0],
+    "lai_range": [3.0, 5.0],
+    "density_range": [500, 2000],
+    "terrain_preference": ["flat", "riparian", "forest_edge"]
+  },
+  "Boxwood": {
+    "common_name": "黄杨",
+    "type": ["shrub", "evergreen", "broadleaf"],
+    "model_path": "nvidia_official/Boxwood.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaf", "leaves", "foliage"],
+      "trunk": ["trunk", "branch", "bark"]},
+    "description": "Slow-growing evergreen shrub with dense, small, dark green leaves. Highly tolerant of pruning and shaping. Classic choice for formal hedges, topiary, and bonsai.",
+    "height_range": [1.5, 6.0],
+    "lai_range": [3.0, 5.0],
+    "density_range": [2000, 6000],
+    "terrain_preference": ["flat", "slope", "urban"]
+  },
+  "Buddha_Belly_Bamboo": {
+    "common_name": "佛肚竹",
+    "type": ["bamboo", "evergreen"],
+    "model_path": "nvidia_official/Buddha_Belly_Bamboo.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaf", "leaves", "foliage"],
+      "trunk": ["trunk", "shoots", "bark"]},
+    "description": "Clumping bamboo species with distinctive swollen internodes resembling a Buddha's belly. Elegant and ornamental. Requires warm, humid environments to thrive.",
+    "height_range": [7.0, 17.0],
+    "lai_range": [4.0, 7.0],
+    "density_range": [500, 1500],
+    "terrain_preference": ["flat", "riparian", "tropical"]
+  },
+  "Burning_Bush": {
+    "common_name": "卫矛（燃烧灌木）",
+    "type": ["shrub", "deciduous", "ornamental"],
+    "model_path": "nvidia_official/Burning_Bush.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaf", "leaves", "Leaves"],
+      "trunk": ["trunk", "shoots", "Trunk"]},
+    "description": "Deciduous shrub famous for its brilliant red autumn foliage. Features corky-winged stems. Widely planted for seasonal color in temperate landscapes.",
+    "height_range": [1.5, 4.5],
+    "lai_range": [3.0, 5.0],
+    "density_range": [500, 2000],
+    "terrain_preference": ["flat", "slope", "forest_edge"]
+  },
+  "Cedar_Shrub": {
+    "common_name": "雪松灌木",
+    "type": ["shrub", "conifer", "evergreen"],
+    "model_path": "nvidia_official/Cedar_Shrub.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["cedarbranches", "leaves", "Leaves"],
+      "trunk": ["cecartrunk", "shoots", "Trunk"]},
+    "description": "Evergreen shrub or small tree with dense, scale-like foliage and pyramidal shape. Aromatic wood and foliage. Widely used for hedges, windbreaks, and ornamental plantings.",
+    "height_range": [4.0, 15.0],
+    "lai_range": [4.0, 6.0],
+    "density_range": [300, 1000],
+    "terrain_preference": ["flat", "slope", "urban"]
+  },
+  "Century": {
+    "common_name": "世纪植物（龙舌兰）",
+    "type": ["succulent", "evergreen"],
+    "model_path": "nvidia_official/Century.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Century", "leaves", "Leaves"],
+      "trunk": []},
+    "description": "Large evergreen succulent with stiff, blue-green leaves arranged in a rosette. Margins bear spines. Long-lived monocarpic plant that flowers once and dies after producing a tall stalk.",
+    "height_range": [1.0, 2.5],
+    "lai_range": [1.5, 3.0],
+    "density_range": [500, 2000],
+    "terrain_preference": ["desert", "rocky_slope", "coastal"]
+  },
+  "Chinese_Juniper": {
+    "common_name": "圆柏（中国圆柏）",
+    "type": ["tree", "conifer", "evergreen"],
+    "model_path": "nvidia_official/Chinese_Juniper.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Chinese_Juniper_branch1jEI", "leaves", "Leaves"],
+      "trunk": ["Chinese_Juniper_trunk", "Chinese_Juniper_branch1"]},
+    "description": "Evergreen conifer native to East Asia with scale-like and needle-like leaves coexisting on the same plant. Highly adaptable and a favored species for bonsai and traditional gardens.",
+    "height_range": [5.0, 18.0],
+    "lai_range": [3.0, 5.0],
+    "density_range": [200, 600],
+    "terrain_preference": ["flat", "slope", "urban"]
+  },
+  "Colorado_Spruce": {
+    "common_name": "蓝云杉",
+    "type": ["tree", "conifer", "evergreen"],
+    "model_path": "nvidia_official/Colorado_Spruce.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Colorado_Spruce_branch1jEI", "Colorado_Spruce_branch_dupespecialpR3", "Leaves"],
+      "trunk": ["Colorado_Spruce_trunk", "Colorado_Spruce_branch1", "Colorado_Spruce_branch_dupespecial"]},
+    "description": "Pyramidal evergreen conifer with stiff horizontal branches and distinctive blue-green to silver-blue needles. A highly ornamental tree prized for its striking coloration.",
+    "height_range": [15.0, 30.0],
+    "lai_range": [4.0, 6.0],
+    "density_range": [150, 400],
+    "terrain_preference": ["flat", "gentle_slope", "mountain"]
+  },
+  "Common_Apple": {
+    "common_name": "苹果树",
+    "type": ["tree", "broadleaf", "deciduous", "fruit"],
+    "model_path": "nvidia_official/Common_Apple.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Apple_leaf_Mat", "leaves", "Leaves"],
+      "trunk": ["Apple_bark_Mat"]},
+    "description": "Small deciduous fruit tree with rounded crown. Pinkish-white flowers bloom in spring, producing edible apples in autumn. One of the most widely cultivated fruit trees worldwide.",
+    "height_range": [4.0, 12.0],
+    "lai_range": [3.0, 5.0],
+    "density_range": [200, 600],
+    "terrain_preference": ["flat", "gentle_slope", "orchard"]
+  },
+  "Crane_Lily": {
+    "common_name": "鹤望兰（天堂鸟）",
+    "type": ["herbaceous", "ornamental", "evergreen"],
+    "model_path": "nvidia_official/Crane_Lily.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaves", "Flower"],
+      "trunk": []},
+    "description": "Herbaceous perennial with striking bird-shaped flowers featuring vibrant orange and blue colors. Native to South Africa. A popular ornamental in tropical and subtropical gardens.",
+    "height_range": [1.0, 2.0],
+    "lai_range": [2.0, 4.0],
+    "density_range": [1000, 3000],
+    "terrain_preference": ["flat", "tropical", "urban"]
+  },
+  "Cuban_Royal_Palm": {
+    "common_name": "古巴王棕",
+    "type": ["palm", "evergreen", "tree"],
+    "model_path": "nvidia_official/Cuban_Royal_Palm.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["leaves4", "leaves1", "leaves2", "leaves3"],
+      "trunk": ["trunk_bottom", "trunk_top"]},
+    "description": "Tall, majestic palm with a smooth, whitish-gray trunk that bulges slightly near the middle. Crown holds large, feathery fronds. An iconic palm of tropical landscapes.",
+    "height_range": [20.0, 30.0],
+    "lai_range": [4.0, 6.0],
+    "density_range": [50, 150],
+    "terrain_preference": ["flat", "tropical", "coastal"]
+  },
+  "Dagger": {
+    "common_name": "丝兰（剑麻）",
+    "type": ["succulent", "evergreen", "ornamental"],
+    "model_path": "nvidia_official/Dagger.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Dagger1", "Dagger2", "Dagger4", "Dagger5"],
+      "trunk": []},
+    "description": "Evergreen shrub or small tree with stiff, sword-shaped leaves ending in sharp points. Highly drought-tolerant and salt-tolerant. Commonly used in arid and coastal landscaping.",
+    "height_range": [1.5, 4.5],
+    "lai_range": [1.5, 3.0],
+    "density_range": [500, 2000],
+    "terrain_preference": ["desert", "coastal", "rocky_slope"]
+  },
+  "Daphne": {
+    "common_name": "瑞香",
+    "type": ["shrub", "evergreen", "ornamental"],
+    "model_path": "nvidia_official/Daphne.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Daphne_leaves"],
+      "trunk": ["Branches"]},
+    "description": "Evergreen or deciduous shrubs renowned for their intensely fragrant flowers in pink, white, or lavender. Prefers well-drained, slightly acidic soils and partial shade.",
+    "height_range": [0.5, 1.5],
+    "lai_range": [2.0, 4.0],
+    "density_range": [1000, 3000],
+    "terrain_preference": ["flat", "slope", "forest_edge"]
+  },
+  "Dogwood": {
+    "common_name": "山茱萸",
+    "type": ["tree", "broadleaf", "deciduous", "ornamental"],
+    "model_path": "nvidia_official/Dogwood.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Dogwood_leaf_v4_Mat", "Dogwood_leaf_v2_Mat", "Dogwood_leaf_Mat", "Dogwood_leaf_v3_Mat"],
+      "trunk": ["Dogwood_bark_Mat"]},
+    "description": "Small deciduous tree known for its showy white or pink bracts in spring that resemble flowers. Produces bright red fruits in autumn. A popular ornamental for gardens.",
+    "height_range": [5.0, 10.0],
+    "lai_range": [3.0, 5.0],
+    "density_range": [200, 500],
+    "terrain_preference": ["flat", "gentle_slope", "forest_edge"]
+  },
+  "Douglas_Fir": {
+    "common_name": "花旗松",
+    "type": ["tree", "conifer", "evergreen"],
+    "model_path": "nvidia_official/Douglas_Fir.usd",
+    "material": {
+      "foliage_color": [0.101, 0.324, 0.021],
+      "trunk_color": [0.243, 0.179, 0.014]},
+    "mesh_rules": {
+      "foliage": ["Douglas_Fir_branchL", "Douglas_Fir_branchSpR3", "Douglas_Fir_branchMwdn"],
+      "trunk": ["Douglas_Fir_trunk", "Douglas_Fir_branchLjEI", "Douglas_Fir_branchS", "Douglas_Fir_branchM", "Douglas_Fir_branchMz0P"]},
+    "description": "Tall, majestic evergreen conifer with a straight trunk and pyramidal crown. One of the most commercially important timber trees in the world. Distinctive cones with trident-shaped bracts.",
+    "height_range": [30.0, 100.0],
+    "lai_range": [5.0, 8.0],
+    "density_range": [100, 300],
+    "terrain_preference": ["mountain", "gentle_slope", "valley"]
+  }
+}

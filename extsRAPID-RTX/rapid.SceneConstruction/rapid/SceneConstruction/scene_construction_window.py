@@ -74,10 +74,11 @@ class SceneConstructionWindow(ui.Window):
         self.models = {}
 
         # -------------------------控制光照的UImodel-------------------------
-        self.models["select_sun_light_path"] = ui.SimpleStringModel('/Light/Sun_Light')
-        self.models["select_sky_light_path"] = ui.SimpleStringModel('/Light/Sky_Light')
-        self.models["light_look_at_target"] = [ui.SimpleFloatModel(v) for v in (0, 0, 0)]
+        self.models["select_sun_light_path"] = ui.SimpleStringModel('/Light/Direct_Sun_Light')
+        self.models["select_sky_light_path"] = ui.SimpleStringModel('/Light/Diffuse_Sky_Light')
         self.models["light_zenith_and_azimuth"] = [ui.SimpleFloatModel(v) for v in (45, 0)]
+        self.models["sky_diffuse_fraction"] = ui.SimpleFloatModel(0.3)
+        self.models["solar_energy_scale"] = ui.SimpleFloatModel(1)
 
         # -------------------------控制地形UImodel-------------------------
         self.models["terrain_type_model"] = ComboBoxModel("Simple Plane", "Randomly Generated Terrain", "Import Terrain Data (Raster)", "Import Terrain Data (Mesh)")
@@ -292,18 +293,15 @@ class SceneConstructionWindow(ui.Window):
                 ui.Button(width=30, height=22, image_url=self.search_icon_path,
                           clicked_fn=lambda: self._on_open_picker_clicked(self.models["select_sky_light_path"], [UsdLux.DomeLight]))
             with ui.HStack():
-                ui.Label("Look At Target",  width=self.label_width)
-                ui.Label("X (m)",  width=self.label_width)
-                ui.FloatField(model=self.models["light_look_at_target"][0])
-                ui.Label("Y (m)", width=self.label_width)
-                ui.FloatField(model=self.models["light_look_at_target"][1])
-                ui.Label("Z (m)", width=self.label_width)
-                ui.FloatField(model=self.models["light_look_at_target"][2])
-            with ui.HStack():
                 ui.Label("Sun Zenith [°]",  width=self.label_width)
                 ui.FloatField(model=self.models["light_zenith_and_azimuth"][0])
                 ui.Label("Sun Azimuth [°]", width=self.label_width)
                 ui.FloatField(model=self.models["light_zenith_and_azimuth"][1])
+            with ui.HStack():
+                ui.Label("Sky Diffuse Fraction",  width=self.label_width)
+                ui.FloatField(model=self.models["sky_diffuse_fraction"])
+                ui.Label("Solar Energy Scale", width=self.label_width)
+                ui.FloatField(model=self.models["solar_energy_scale"])
             ui.Button("Create Light", clicked_fn=self.on_create_light)
 
     def _on_terrain_cteate(self):
@@ -407,24 +405,25 @@ class SceneConstructionWindow(ui.Window):
         SceneConstructionUtils.save_UI_data_to_json(self.models)
 
     def on_create_light(self):
+        # 获取UI数据
         sun_light_path = self.models["select_sun_light_path"].as_string
         sky_light_path = self.models["select_sky_light_path"].as_string
         light_zenith_and_azimuth = [m.as_float for m in self.models["light_zenith_and_azimuth"]]
 
-        # 计算世界包围盒范围信息，并删除"/World"下的光源("/World"下的有边界的光源(disklight,clyberlight)会影响世界包围盒计算ComputeWorldBound)
-        # 返回(dict):包围盒min, 包围盒max, 包围盒center, 包围盒尺寸 (长、宽、高)size,外接球半径radius
-        scene_bounding_info = IlluminationUtils.get_scene_bounding_info(root_path="/World")
-
         # 创建光源
-        IlluminationUtils.create_light(sun_light_path, sky_light_path, scene_bounding_info['radius'])
-        # 设定光源属性
-        IlluminationUtils.setup_sun_light(sun_light_path, light_zenith_and_azimuth[0], light_zenith_and_azimuth[1], scene_bounding_info['center'])
+        sky_diffuse_fraction = self.models["sky_diffuse_fraction"].as_float
+        solar_energy_scale = self.models["solar_energy_scale"].as_float
+        IlluminationUtils.create_light(sun_light_path, sky_light_path, light_zenith_and_azimuth[0], sky_diffuse_fraction, solar_energy_scale)
+        # 设定光源方向
+        IlluminationUtils.setup_sun_light_orient(sun_light_path, light_zenith_and_azimuth[0], light_zenith_and_azimuth[1])
         # 可视化光源
-        IlluminationUtils.draw_illumination_visualization(light_zenith_and_azimuth[0], light_zenith_and_azimuth[1], scene_bounding_info['center'])
+        IlluminationUtils.draw_illumination_visualization(light_zenith_and_azimuth[0], light_zenith_and_azimuth[1])
         # 保存当前窗口数据到simulation_parameters.json文件
         SceneConstructionUtils.save_UI_data_to_json(self.models)
 
     def get_UI_data_to_simulation(self):
         return {
-            "light_zenith_and_azimuth": [i.as_float for i in self.models["light_zenith_and_azimuth"]]
+            "light_zenith_and_azimuth": [i.as_float for i in self.models["light_zenith_and_azimuth"]],
+            "direct_sun_intensity": self.models["sky_diffuse_fraction"].as_float,
+            "diffuse_sky_intensity": self.models["solar_energy_scale"].as_float
         }

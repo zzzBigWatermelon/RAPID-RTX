@@ -107,7 +107,7 @@ class SceneConstructionExtension(omni.ext.IExt):
             self._window = None
 
     def on_shutdown(self):
-        print("[rapid.Observation] shutdown")
+        print("[rapid.AI] shutdown")
 
         # 移除菜单项
         if hasattr(self, '_menu_items') and self._menu_items:

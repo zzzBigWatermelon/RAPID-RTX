@@ -85,7 +85,6 @@ class ImportDataDistributor:
     def __init__(self, folder_path: str, data_file_path: str, mode="PointInstancer"):
         """
         Args:
-            asset_path: 模型资产路径
             data_file_path: 位置数据文件路径
             mode: 实例化模式 ("PointInstancer" 或 "PrimInstancing")
         """
@@ -190,8 +189,7 @@ class DistributionUtils:
                         omni.kit.commands.execute(
                             "MovePrim",
                             path_from=path,
-                            path_to=target_path
-                        )
+                            path_to=target_path)
                         stage_proto_paths.append(target_path)
                         carb.log_info(f"[Distribution] 舞台 Prim 已移动至原型库: {target_path}")
                 else:
@@ -236,8 +234,7 @@ class DistributionUtils:
 
         # 确保原型在舞台上并获取它们的路径
         stage_proto_paths = DistributionUtils.ensure_prototypes_on_stage(
-            stage, object_path, proto_root_path
-        )
+            stage, object_path, proto_root_path)
 
         # 将生成的舞台原型路径绑定给 PointInstancer
         prototypes_rel = instancer.GetPrototypesRel()

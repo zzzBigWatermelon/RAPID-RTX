@@ -41,7 +41,7 @@ def create_optics_sensor(data):
     # 设置的传感器旋转属性，从位置朝向目标（目前只针对单次采样）、顺便添加tran和rotate属性
     handling_coordinates_rotations(camera, data['single_sampling_sensor_position'], data['single_sampling_observation_center'])
     # 计算传感器光学参数——传感器物理宽度和焦距(函数内部已经更新对应属性)
-    horizontal_aperture, focal_length = calculate_focal_length(camera, sensor_type, sensor_pixels, data['perspective_sensor_fov'], data['orthographic_sensor_extent'])
+    horizontal_aperture, focal_length = calculate_focal_length(camera, sensor_type, sensor_pixels, data['perspective_sensor_fov'], data['orthographic_sensor_width_extent'])
 
     # ---------------------------写入自定义传感器参数-----------------------------
     # 写入基础属性

@@ -39,6 +39,19 @@ Double-click RAPID-RTX.exe to run the program.
 - **⚠️Installation Path Length Limit**: Windows limits path length to 260 characters. If you encounter missing files or other build errors, try moving the repository to a shorter path. It is recommended to use decompression software such as Bandizip instead of the Windows system decompression.
 - **⚠️License Terms**: If this is your first time building/loading RAPID-RTX, you will be prompted to accept the Omniverse license terms.
 
+## Known Issues
+
+- **⚠️Note:** A known issue exists where driver version 595.xx on Blackwell GPUs may experience crashes.
+- [rapid.Tool]->Image Data Viewer: After switching image paths, the Image Data Viewer window requires switching bands to read images from the new path.
+- [rapid.LiDAR] The spaceborne large-spot lidar simulation does not include noise algorithms, resulting in a smooth energy curve.
+- [rapid.LiDAR] Ground-based LiDAR simulations always lack the last two frames of data; this is due to an asynchronous code issue.
+
+- [rapid.SceneConstruction] In the SceneConstruction window, the illumination center input is ineffective; the default calculated world bounding box is used as the illumination center. There is no control over the light source's intensity parameters; intensity can only be controlled through the light source's property.
+
+- [rapid.ExampleScenes] In the Wytham scene, the leaf transmittance is in the red band, and the leaves appear red when viewed from below.
+
+- [rapid.ReflectanceDarabase] The plot button in the ReflectanceDarabase window is not bound to any actual function; the selected reflectance table data is plotted as a spectral line.
+
 ## Support
 
 - Please use GitHub [Discussions](https://github.com/zzzBigWatermelon/RAPID-RTX/discussions) for discussing ideas, asking questions, and requests for new features.

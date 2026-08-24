@@ -33,7 +33,7 @@
                     "selected_in_dock": true,
                     "title": "Viewport",
                     "visible": true,
-                    "width": 958.0
+                    "width": 956.0
                   }
                 ],
                 "dock_id": 6,
@@ -55,7 +55,7 @@
                 "selected_in_dock": true,
                 "title": "Console",
                 "visible": true,
-                "width": 1006.0
+                "width": 1004.0
               },
               {
                 "dock_id": 4,
@@ -65,7 +65,7 @@
                 "selected_in_dock": false,
                 "title": "Content",
                 "visible": true,
-                "width": 1006.0
+                "width": 1004.0
               }
             ],
             "dock_id": 4,
@@ -87,19 +87,19 @@
                 "selected_in_dock": false,
                 "title": "Stage",
                 "visible": true,
-                "width": 910.0
+                "width": 912.0
               },
               {
                 "dock_id": 7,
                 "dock_tab_bar_enabled": true,
                 "dock_tab_bar_visible": true,
                 "height": 517.0,
-                "position_x": 1010.0,
+                "position_x": 1008.0,
                 "position_y": 26.0,
                 "selected_in_dock": true,
                 "title": "Scene Construction",
                 "visible": true,
-                "width": 910.0
+                "width": 912.0
               },
               {
                 "dock_id": 7,
@@ -109,7 +109,7 @@
                 "selected_in_dock": false,
                 "title": "Reflectance Database",
                 "visible": true,
-                "width": 910.0
+                "width": 912.0
               },
               {
                 "dock_id": 7,
@@ -119,7 +119,17 @@
                 "selected_in_dock": false,
                 "title": "Observation",
                 "visible": true,
-                "width": 910.0
+                "width": 912.0
+              },
+              {
+                "dock_id": 7,
+                "height": 517.0,
+                "position_x": 1008.0,
+                "position_y": 26.0,
+                "selected_in_dock": false,
+                "title": "Chat USD",
+                "visible": true,
+                "width": 912.0
               }
             ],
             "dock_id": 7,
@@ -132,12 +142,12 @@
                 "dock_tab_bar_enabled": true,
                 "dock_tab_bar_visible": true,
                 "height": 428.0,
-                "position_x": 1010.0,
+                "position_x": 1008.0,
                 "position_y": 547.0,
                 "selected_in_dock": true,
                 "title": "Property",
                 "visible": true,
-                "width": 910.0
+                "width": 912.0
               }
             ],
             "dock_id": 8,
@@ -172,16 +182,6 @@
   },
   {
     "dock_id": 0,
-    "height": 500.0,
-    "position_x": 570.0,
-    "position_y": 200.0,
-    "selected_in_dock": false,
-    "title": "Scatter Window",
-    "visible": false,
-    "width": 300.0
-  },
-  {
-    "dock_id": 0,
     "height": 600.0,
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
@@ -189,16 +189,6 @@
     "title": "Add Attribute...",
     "visible": false,
     "width": 400.0
-  },
-  {
-    "dock_id": 0,
-    "height": 500.0,
-    "position_x": 3.4028234663852886e+38,
-    "position_y": 3.4028234663852886e+38,
-    "selected_in_dock": false,
-    "title": "OmniGraph Toolkit",
-    "visible": false,
-    "width": 800.0
   },
   {
     "dock_id": 0,
@@ -222,13 +212,13 @@
   },
   {
     "dock_id": 0,
-    "height": 600.0,
+    "height": 500.0,
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "Select output Folder",
+    "title": "OmniGraph Toolkit",
     "visible": false,
-    "width": 1000.0
+    "width": 800.0
   },
   {
     "dock_id": 0,
@@ -236,7 +226,17 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "Lula Robot Description Editor",
+    "title": "Grasp Editor",
+    "visible": false,
+    "width": 600.0
+  },
+  {
+    "dock_id": 0,
+    "height": 500.0,
+    "position_x": 3.4028234663852886e+38,
+    "position_y": 3.4028234663852886e+38,
+    "selected_in_dock": false,
+    "title": "Lula Test Widget",
     "visible": false,
     "width": 600.0
   },
@@ -252,11 +252,11 @@
   },
   {
     "dock_id": 0,
-    "height": 500.0,
+    "height": 600.0,
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "URDF Importer",
+    "title": "Replicator YAML",
     "visible": false,
     "width": 400.0
   },
@@ -276,17 +276,7 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "Lula Test Widget",
-    "visible": false,
-    "width": 600.0
-  },
-  {
-    "dock_id": 0,
-    "height": 600.0,
-    "position_x": 3.4028234663852886e+38,
-    "position_y": 3.4028234663852886e+38,
-    "selected_in_dock": false,
-    "title": "Replicator YAML",
+    "title": "URDF Importer",
     "visible": false,
     "width": 400.0
   },
@@ -296,9 +286,39 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "Grasp Editor",
+    "title": "Camera Inspector",
+    "visible": false,
+    "width": 500.0
+  },
+  {
+    "dock_id": 0,
+    "height": 400.0,
+    "position_x": 3.4028234663852886e+38,
+    "position_y": 3.4028234663852886e+38,
+    "selected_in_dock": false,
+    "title": "Block World Generator",
     "visible": false,
     "width": 600.0
+  },
+  {
+    "dock_id": 0,
+    "height": 500.0,
+    "position_x": 3.4028234663852886e+38,
+    "position_y": 3.4028234663852886e+38,
+    "selected_in_dock": false,
+    "title": "Gain Tuner",
+    "visible": false,
+    "width": 700.0
+  },
+  {
+    "dock_id": 0,
+    "height": 600.0,
+    "position_x": 3.4028234663852886e+38,
+    "position_y": 3.4028234663852886e+38,
+    "selected_in_dock": false,
+    "title": "Select output Folder",
+    "visible": false,
+    "width": 1000.0
   },
   {
     "dock_id": 0,
@@ -316,9 +336,9 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "Camera Inspector",
+    "title": "Lula Robot Description Editor",
     "visible": false,
-    "width": 500.0
+    "width": 600.0
   },
   {
     "dock_id": 0,
@@ -372,16 +392,6 @@
   },
   {
     "dock_id": 0,
-    "height": 400.0,
-    "position_x": 3.4028234663852886e+38,
-    "position_y": 3.4028234663852886e+38,
-    "selected_in_dock": false,
-    "title": "Block World Generator",
-    "visible": false,
-    "width": 600.0
-  },
-  {
-    "dock_id": 0,
     "height": 600.0,
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
@@ -412,16 +422,6 @@
   },
   {
     "dock_id": 0,
-    "height": 500.0,
-    "position_x": 3.4028234663852886e+38,
-    "position_y": 3.4028234663852886e+38,
-    "selected_in_dock": false,
-    "title": "Gain Tuner",
-    "visible": false,
-    "width": 700.0
-  },
-  {
-    "dock_id": 0,
     "height": 600.0,
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
@@ -436,7 +436,7 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "omni.ui.scene 2314484624768",
+    "title": "omni.ui.scene 2306398514576",
     "visible": false,
     "width": 210.8000030517578
   },
@@ -446,7 +446,7 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "omni.ui.scene 2314484574176",
+    "title": "omni.ui.scene 2306398512400",
     "visible": false,
     "width": 210.8000030517578
   },
@@ -456,7 +456,7 @@
     "position_x": 3.4028234663852886e+38,
     "position_y": 3.4028234663852886e+38,
     "selected_in_dock": false,
-    "title": "omni.ui.scene 2314484595392",
+    "title": "omni.ui.scene 2306398537968",
     "visible": false,
     "width": 210.8000030517578
   },
@@ -479,5 +479,15 @@
     "title": "Simulation Settings",
     "visible": false,
     "width": 400.0
+  },
+  {
+    "dock_id": 0,
+    "height": 164.0,
+    "position_x": 512.0,
+    "position_y": 236.0,
+    "selected_in_dock": false,
+    "title": "0",
+    "visible": false,
+    "width": 543.0
   }
 ]

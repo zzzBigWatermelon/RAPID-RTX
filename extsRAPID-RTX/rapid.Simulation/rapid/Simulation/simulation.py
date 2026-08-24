@@ -15,9 +15,9 @@ import omni.kit.notification_manager as nm
 from isaacsim.util.debug_draw import _debug_draw
 # 常用模块
 import time
+import os
 import asyncio
 from pathlib import Path
-import os
 import shutil
 import math
 from typing import Dict
@@ -232,6 +232,8 @@ class Simulation:
         # ----------------------获取太阳几何参数--------------------------
         scene_construction_data = simulation_parameters['SceneConstruction']
         self.params['light_zenith_and_azimuth'] = scene_construction_data['light_zenith_and_azimuth']
+        self.params['direct_sun_intensity'] = scene_construction_data['direct_sun_intensity']
+        self.params['diffuse_sky_intensity'] = scene_construction_data['diffuse_sky_intensity']
         return True
 
     def check_band_length_consistency(self, simulation_parameters):
@@ -245,6 +247,10 @@ class Simulation:
         """
         self.reflectance_data = simulation_parameters['ReflectanceDatabase']['ref_tra_data']
         self.bands_data = simulation_parameters['ReflectanceDatabase']['bands_data']
+        print('11111111111111111111111111111111111111111111111111111111')
+        print(self.reflectance_data)
+        print(self.bands_data)
+        print('11111111111111111111111111111111111111111111111111111111')
         lengths = []
         # 1. 收集所有长度
         for name, data in self.reflectance_data.items():
@@ -304,13 +310,10 @@ class Simulation:
         self.viewport = vp_utils.get_active_viewport_window()
         self.viewport.visible = False
 
-        # 色调映射改到clamp，对原始辐射值进行线性曝光调整，取消gamma校正
+        # 色调映射改到clamp，跳过一切曝光调整
         self._settings.set('/rtx/post/tonemap/op', 0)
+        # 取消gamma校正
         self._settings.set('/rtx/post/tonemap/enableSrgbToGamma', False)
-        # 开启渲染结算模式（等待一帧渲染完成，防止辐亮度npy输出为空值）
-        self._settings.set("/rtx/pathtracing/settle/enabled", True)
-        # 设定渲染器的辐射度上限，65504为float16的极限值
-        self._settings.set("/rtx/pathtracing/maxRadiance", 65504.0)
         # 关闭fireflyFilter，“萤火虫”（Fireflies，即极亮且无法通过增加采样消除的孤立像素点），可能会对辐亮度进行截断
         self._settings.set('/rtx/pathtracing/fireflyFilter/enabled', False)
         # 关闭降噪
@@ -391,13 +394,11 @@ class Simulation:
         sun_light_path = '/Replicator/Sun_Light'
         sky_light_path = '/Replicator/Sky_Light'
 
-        # 计算世界包围盒范围信息
-        scene_bounding_info = IlluminationUtils.get_scene_bounding_info(root_path="/World")
         # 创建光源
-        IlluminationUtils.create_light(sun_light_path, sky_light_path, scene_bounding_info['radius'])
+        IlluminationUtils.create_light(sun_light_path, sky_light_path, self.params['direct_sun_intensity'], self.params['diffuse_sky_intensity'])
         # 设定光源属性
         zenith_and_azimuth = self.params['light_zenith_and_azimuth']
-        IlluminationUtils.setup_sun_light(sun_light_path, zenith_and_azimuth[0], zenith_and_azimuth[1], scene_bounding_info['center'])
+        IlluminationUtils.setup_sun_light_orient(sun_light_path, zenith_and_azimuth[0], zenith_and_azimuth[1])
 
     def __add_reflectance_panel(self, panel_size: float = 3.0, fill_factor: float = 0.6):
         '''引入反射板,并且计算传感器观测反射板的合适的位置

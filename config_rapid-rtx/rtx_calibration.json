@@ -1,0 +1,48 @@
+{
+    "calibration_version":"1.0",
+
+    "renderer":
+    {
+        "name":"RTX",
+        "environment":"isaac_sim_5.1.0",
+        "render_mode": "path_tracing",
+        "tone_mapping":"clamp",
+        "radiance":"linear",
+        "intensity_units":"RTX_relative"
+    },
+
+    "direct_light":
+    {
+        "type":"DistantLight",
+        "radiance_coefficient":8.775000e-4,
+        "model": {
+            "equation": "L_direct = K_direct * I_direct * cos(theta_s)",
+            "projection": "cosine"
+        },
+        "default_parameters": {
+            "angular_size": 0.53
+        }
+    },
+
+    "diffuse_light":
+    {
+        "type":"DomeLight",
+        "radiance_coefficient":8.800000e-4,
+        "model": {
+            "equation": "L_diffuse = K_diffuse * I_diffuse",
+            "projection": "hemisphere"
+        }
+    },
+
+    "illumination_model":
+    {
+        "direct_projection":"cosine",
+        "diffuse_projection":"hemisphere",
+        "reference_irradiance":2.0
+    },
+
+    "units":
+    {
+        "angular_size": "degree"
+    }
+}

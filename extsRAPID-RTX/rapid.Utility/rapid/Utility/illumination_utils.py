@@ -1,7 +1,13 @@
+# 常规库
 import math
+import json
+import carb
+from pathlib import Path
 from datetime import datetime, timedelta, timezone
 import numpy as np
+# omni库
 import omni.usd
+import omni.kit.notification_manager as nm
 from pxr import Usd, Gf, UsdGeom, UsdLux
 from isaacsim.util.debug_draw import _debug_draw
 
@@ -9,18 +15,16 @@ from isaacsim.util.debug_draw import _debug_draw
 class IlluminationUtils:
 
     @staticmethod
-    def create_light(sun_light_path='/Light/Sun_Light', sky_light_path='/Light/Sky_Light',
-                     sun_light_radius=100, sun_light_intensity=8000000000.0,
-                     sky_light_intensity=150):
+    def create_light(direct_sun_light_path='/Light/Direct_Sun_Light', diffuse_sky_light_path='/Light/Diffuse_Sky_Light',
+                     sun_zenith_deg=0, sky_diffuse_fraction=0.3, solar_energy_scale=1):
         '''
-        创建直射光(DiskLight)和穹顶光(DomeLight)，并统一放在 /Light 父节点下
+        创建直射光(DistantLight)和穹顶光(DomeLight)，并统一放在 /Light 父节点下
 
         Args:
-            sun_light_path: 以 /Light/ 开头
-            sky_light_path: 以 /Light/ 开头
-            sun_light_radius: 直射光半径
-            sun_light_intensity: 直射光强度
-            sky_light_intensity: 穹顶光强度
+            direct_sun_light_path: 太阳直射光舞台路径，以 /Light/ 开头
+            diffuse_sky_light_path: 天空散射光舞台路径，以 /Light/ 开头
+            sky_diffuse_fraction: 直射光强度
+            solar_energy_scal: 穹顶光强度
         Returns:
             sun_light_prim: 返回太阳光的 Prim 对象
         '''
@@ -32,87 +36,124 @@ class IlluminationUtils:
         if not stage.GetPrimAtPath(light_parent_path):
             UsdGeom.Xform.Define(stage, light_parent_path)
 
-        # 2. 创建并配置 SunLight (DiskLight)
+        # 2. 计算直射光和散射光的强度
+        light_intensity = IlluminationUtils.solve_rtx_light_intensity(
+            sky_diffuse_fraction,
+            solar_energy_scale)
+
+        # 3. 创建并配置 SunLight (DiskLight)
         # 即使传入的路径不是以 /Light 开头，USD 也会根据路径自动创建层级
-        sun_light = UsdLux.DiskLight.Define(stage, sun_light_path)
-        sun_light.GetIntensityAttr().Set(sun_light_intensity)
-        sun_light.GetRadiusAttr().Set(sun_light_radius)
-        # 开启 Normalize光照不随半径增大而变亮（只改变阴影虚实）
-        # sun_light.GetNormalizeAttr().Set(True)
+        sun_light = UsdLux.DistantLight.Define(stage, direct_sun_light_path)
+        sun_light.GetIntensityAttr().Set(light_intensity[0])
+        # UsdLux.DistantLight默认太阳角是0.53，配置文件中也是默认0.53
+        # sun_light.GetAngleyAttr().Set(0.53)
 
         # 3. 创建并配置 DomeLight (SkyLight)
-        sky_light = UsdLux.DomeLight.Define(stage, sky_light_path)
-        sky_light.GetIntensityAttr().Set(sky_light_intensity)
+        sky_light = UsdLux.DomeLight.Define(stage, diffuse_sky_light_path)
+        sky_light.GetIntensityAttr().Set(light_intensity[1])
 
         return sun_light.GetPrim()
 
     @staticmethod
-    def setup_sun_light(light_path, zenith_deg, azimuth_deg, light_center=(0.0, 0.0, 0.0), distance=100000.0):
+    def solve_rtx_light_intensity(sky_diffuse_fraction, solar_energy_scale):
+        # 1. 读取RTX光照校准参数
+        kit_path = carb.tokens.get_tokens_interface().resolve("${kit}")  # kit程序的根目录，kit文件夹
+        config_dir = Path(kit_path).with_name("config_rapid-rtx")  # 替换成配置参数文件夹
+        json_file_path = config_dir / "rtx_calibration.json"
+
+        # 2. 获取radiance/intensity标定系数
+        with open(json_file_path, "r") as f:
+            calibration = json.load(f)
+        direct_coeff = calibration["direct_light"]["radiance_coefficient"]
+        diffuse_coeff = calibration["diffuse_light"]["radiance_coefficient"]
+        reference_irradiance = calibration["illumination_model"]["reference_irradiance"]
+
+        # 3. 能量分配
+        total_energy = reference_irradiance * solar_energy_scale  # 总太阳能量
+        diffuse_energy = (total_energy * sky_diffuse_fraction)  # 天空散射
+        direct_energy = (total_energy * (1.0 - sky_diffuse_fraction))  # 直射太阳
+
+        # 4. irradiance -> RTX intensity
+        # DistantLight: radiance = K_direct * intensity
+        direct_sun_light_intensity = direct_energy / direct_coeff
+        # SkyLight: radiance = intensity * coeff
+        diffuse_sky_light_intensity = diffuse_energy / diffuse_coeff
+        return (direct_sun_light_intensity, diffuse_sky_light_intensity)
+
+    @staticmethod
+    def setup_sun_light_orient(direct_sun_light_path, zenith_deg, azimuth_deg):
         """
-        使用极坐标控制 SunLight 的几何属性，并指定光照中心
+        天顶角和方位角转为为控制SunLight的orient属性
 
         Args:
             light_path: USD 路径
             zenith_deg: 天顶角 (0-90)
             azimuth_deg: 方位角 (0-360)
-            light_center: 光照的目标中心点坐标 (x, y, z)
-            distance: 灯光距离中心点的距离
         """
         stage = omni.usd.get_context().get_stage()
         # 获取 Prim 对象
-        prim = stage.GetPrimAtPath(light_path)
+        prim = stage.GetPrimAtPath(direct_sun_light_path)
         if not prim.IsValid():
-            print(f"Warning: {light_path} is not valid.")
+            nm.post_notification(
+                "Sensor is not created. Please create a sensor before starting simulation.",
+                status=nm.NotificationStatus.WARNING,
+                duration=5)
             return
-
-        # 转换为 Gf.Vec3d 方便后续数学运算
-        target_center = Gf.Vec3d(light_center)
 
         # 1. 角度转弧度并计算相对于中心点的偏移位置 (Local Offset)
         zenith_rad = np.radians(zenith_deg)
         azimuth_rad = np.radians(azimuth_deg)
 
-        off_x = distance * np.sin(zenith_rad) * np.cos(azimuth_rad)
-        off_y = distance * np.sin(zenith_rad) * np.sin(azimuth_rad)
-        off_z = distance * np.cos(zenith_rad)
-        offset = Gf.Vec3d(off_x, off_y, off_z)
+        # 2. 计算太阳方向
+        sun_direction = Gf.Vec3d(np.sin(zenith_rad)*np.cos(azimuth_rad),
+                                 np.sin(zenith_rad)*np.sin(azimuth_rad),
+                                 np.cos(zenith_rad))
+        sun_direction.Normalize()
 
-        # 2. 计算灯光在世界坐标系中的绝对位置
-        # 绝对位置 = 中心点 + 极坐标偏移
-        abs_pos = target_center + offset
+        # 3. 光传播方向
+        light_direction = -sun_direction
+        light_direction.Normalize()
 
-        # 3. 获取 Xformable 接口
-        xformable = UsdGeom.Xformable(prim)
+        # 4.DistantLight默认方向
+        default_direction = Gf.Vec3d(0, 0, 1)
 
-        # 4. 设置位置 (Translate)
-        translate_op = xformable.GetTranslateOp()
-        if not translate_op:
-            translate_op = xformable.AddTranslateOp(UsdGeom.XformOp.PrecisionFloat)
-
-        # 这里的精度由 set_xform_op_smart 处理更稳妥，或者直接传 Vec3f
-        # 考虑到位置属性通常也是 float，这里强制转换一下
-        translate_op.Set(Gf.Vec3f(abs_pos))
-
-        # 5. 计算朝向 (Orient) - 让灯光指向指定的 light_center
-        # 方向向量 = 目标中心 - 灯光当前位置
-        forward_dir = (target_center - abs_pos).GetNormalized()
-
-        # 默认灯光轴向是 -Z (0,0,-1)
-        default_dir = Gf.Vec3d(0, 0, -1)
-
-        # 计算从默认轴到目标方向的旋转
-        rot_matrix_quatd = Gf.Rotation(default_dir, forward_dir).GetQuat()
+        # 5.计算旋转Quaternion
+        rot_matrix_quatd = Gf.Rotation(default_direction, sun_direction).GetQuat()
 
         # 6. 获取或创建 Orient 操作
+        xformable = UsdGeom.Xformable(prim)
         orient_op = xformable.GetOrientOp()
         if not orient_op:
             orient_op = xformable.AddOrientOp(UsdGeom.XformOp.PrecisionFloat)
 
-        # set_xform_op_smart 内部会根据 orient_op 的实际类型进行转换数据精度Gf.Vec3d/Gf.Vec3f
+        # set_xform_op_smart 内部会根据 orient_op 的实际类型进行转换数据精度
         IlluminationUtils.set_xform_op_smart(orient_op, rot_matrix_quatd)
 
     @staticmethod
-    def draw_illumination_visualization(zenith_deg, azimuth_deg, light_center=(0.0, 0.0, 0.0), line_length=200.0):
+    def set_xform_op_smart(op, value):
+        """
+        智能根据 op 的精度设置数值
+        """
+        if not op:
+            return
+
+        target_type = op.GetAttr().GetTypeName()
+
+        # 如果目标是单精度
+        if "f" in str(target_type).lower():
+            if isinstance(value, (Gf.Vec3d, Gf.Vec3f)):
+                op.Set(Gf.Vec3f(value))
+            elif isinstance(value, (Gf.Quatd, Gf.Quatf)):
+                op.Set(Gf.Quatf(value))
+        # 如果目标是双精度
+        else:
+            if isinstance(value, (Gf.Vec3d, Gf.Vec3f)):
+                op.Set(Gf.Vec3d(value))
+            elif isinstance(value, (Gf.Quatd, Gf.Quatf)):
+                op.Set(Gf.Quatd(value))
+
+    @staticmethod
+    def draw_illumination_visualization(zenith_deg, azimuth_deg, light_center=(0, 0, 0), line_length=600.0):
         """
         根据天顶角和方位角，围绕指定中心点绘制光源方向可视化线段
 
@@ -166,98 +207,6 @@ class IlluminationUtils:
 
         # 绘制指向太阳的端点（橙色大点）
         draw.draw_points(p_starts, point_colors, [12.0])
-
-    @staticmethod
-    def set_xform_op_smart(op, value):
-        """
-        智能根据 op 的精度设置数值
-        """
-        if not op:
-            return
-
-        target_type = op.GetAttr().GetTypeName()
-
-        # 如果目标是单精度
-        if "f" in str(target_type).lower():
-            if isinstance(value, (Gf.Vec3d, Gf.Vec3f)):
-                op.Set(Gf.Vec3f(value))
-            elif isinstance(value, (Gf.Quatd, Gf.Quatf)):
-                op.Set(Gf.Quatf(value))
-        # 如果目标是双精度
-        else:
-            if isinstance(value, (Gf.Vec3d, Gf.Vec3f)):
-                op.Set(Gf.Vec3d(value))
-            elif isinstance(value, (Gf.Quatd, Gf.Quatf)):
-                op.Set(Gf.Quatd(value))
-
-    @staticmethod
-    def get_scene_bounding_info(root_path="/World"):
-        """
-        计算场景中指定路径下所有几何体的包围盒、中心点和外接圆半径
-
-        Args:
-            root_path: 计算的起始路径，默认为 "/World"
-
-        Returns:
-            dict: 包含 min, max, center, radius, size 的字典
-        """
-        stage = omni.usd.get_context().get_stage()
-        root_prim = stage.GetPrimAtPath(root_path)
-        # ----------------- 第一步：检查并删除"/World"下的光源 ------------
-        # "/World"下的有边界的光源(disklight,clyberlight)会影响世界包围盒计算ComputeWorldBound
-        # 注意：在遍历时删除元素，建议先转成 list 获取路径，再统一删除
-        prims_to_delete = []
-
-        # 遍历根路径下的直接子节点
-        for child in root_prim.GetChildren():
-            # 检查是否是灯光 (基于 API 或 类型名)
-            if child.HasAPI(UsdLux.LightAPI) or "Light" in child.GetTypeName():
-                prims_to_delete.append(child.GetPath())
-
-        if prims_to_delete:
-            for p_path in prims_to_delete:
-                print(f"Cleaning up old light: {p_path}")
-                stage.RemovePrim(p_path)
-            # 提示：删除 Prim 后，Stage 会自动更新
-        if not root_prim.IsValid():
-            print(f"Warning: Root path {root_path} is invalid.")
-            return None
-
-        # ----------------- 第二步：计算几何包围盒 ------------
-        # UsdGeom.Tokens.default_ 表示只计算常规几何体（不含 Proxy 或 Guide）
-        purposes = [UsdGeom.Tokens.default_]
-        bbox_cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), purposes)
-
-        # 2. 计算世界坐标系下的包围盒
-        # ComputeWorldBound 返回的是 Gf.BBox3d，包含了变换矩阵
-        bbox = bbox_cache.ComputeWorldBound(root_prim)
-
-        # 提取 AABB 范围 (Gf.Range3d)
-        range_3d = bbox.ComputeAlignedRange()
-        min_pt = range_3d.GetMin()
-        max_pt = range_3d.GetMax()
-
-        # 3. 如果场景为空，处理异常
-        if range_3d.IsEmpty():
-            return {"center": (0, 0, 0), "radius": 0, "size": (0, 0, 0)}
-
-        # 4. 计算几何中心
-        center = (min_pt + max_pt) / 2.0
-
-        # 5. 计算包围盒尺寸 (长、宽、高)
-        size = max_pt - min_pt
-
-        # 6. 计算外接圆/球半径 (从中心到最远顶点的距离)
-        # 这是最稳妥的外切圆计算方式
-        radius = (max_pt - center).GetLength()
-
-        return {
-            "min": (min_pt[0], min_pt[1], min_pt[2]),
-            "max": (max_pt[0], max_pt[1], max_pt[2]),
-            "center": (center[0], center[1], center[2]),
-            "size": (size[0], size[1], size[2]),
-            "radius": float(radius)
-        }
 
 
 def solar_position(lat, lon, dt_utc):

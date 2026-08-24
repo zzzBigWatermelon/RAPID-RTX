@@ -35,6 +35,9 @@ class ObservationWindow(ui.Window):
         # 1. 所有的 UI Model 数据持久化 (UI 清空时数据不会丢)
         self._init_models()
 
+        # 初始化回调，防止刷新UI是重复绑定
+        self._orthographic_binding_initialized = False  # 正射相机高度范围计算回调
+
         # 监听新打开Stage事件
         self._usd_context = omni.usd.get_context()
         # 订阅事件流 (OPENED, SAVED, CLOSED 等)
@@ -65,17 +68,19 @@ class ObservationWindow(ui.Window):
         # UI模型直接存入字典，键名与最终输出数据的键名保持一致
         self.models = {}
 
-        # 通用属性
+        # 传感器通用属性
         self.models["sensor_stage_path"] = ui.SimpleStringModel('/World/sensor')
         self.models["sensor_type"] = ComboBoxModel("Perspective", "Orthographic", "Airborne LiDAR", "Terrestrial LiDAR", "Spaceborne LiDAR (Waveform LiDAR Data)")
         self.models["optical_observation_type"] = ComboBoxModel("Single Sampling", "Constant Altitude Sampling",
                                                                 "Semi-circular Sampling", "Omnidirectional Sampling")
+        self.models["optical_sensor_pixels"] = [ui.SimpleIntModel(v) for v in (200, 200)]  # 光学分辨率
 
         # 透视传感器属性
-        self.models["optical_sensor_pixels"] = [ui.SimpleIntModel(v) for v in (200, 200)]  # 光学分辨率
         self.models["perspective_sensor_fov"] = ui.SimpleFloatModel(30.0)
         # 正射传感器属性
         self.models["orthographic_sensor_extent"] = ui.SimpleFloatModel(30.0)
+        self.models["orthographic_sensor_width_extent"] = ui.SimpleFloatModel(50.0)
+        self.models["orthographic_sensor_height_extent"] = ui.SimpleFloatModel(50.0)
 
         # 光学传感器恒定单次采样
         self.models["single_sampling_sensor_position"] = [ui.SimpleFloatModel(v) for v in (0, 0, 30)]
@@ -243,6 +248,12 @@ class ObservationWindow(ui.Window):
                 ui.FloatField(model=self.models["perspective_sensor_fov"])
 
     def _build_orthographic_sensor(self):
+        '''正射传感器参数设定
+        '''
+        # 建立 Width -> Height 联动
+        self._fn_orthographic_extent_binding()
+
+        # UI结构
         with ui.VStack(spacing=SPACING):
             with ui.HStack():
                 ui.Label("Width [pixels]:", name="Width [pixels]", width=self.label_width, style=get_style())
@@ -251,8 +262,10 @@ class ObservationWindow(ui.Window):
                 ui.Label("Height [Pixels]:", name="Height [Pixels]", width=self.label_width, style=get_style())
                 ui.IntField(model=self.models["optical_sensor_pixels"][1])
             with ui.HStack():
-                ui.Label("Diagonal Extent [m]:", name="Diagonal Extent", width=self.label_width, style=get_style())
-                ui.FloatField(model=self.models["orthographic_sensor_extent"])
+                ui.Label("FOV Width Extent [m]:", name="FOV Width Extent", width=self.label_width, style=get_style())
+                ui.FloatField(model=self.models["orthographic_sensor_width_extent"])
+                ui.Label("FOV Height Extent [m]:", name="FOV Height Extent", width=self.label_width, style=get_style())
+                ui.FloatField(model=self.models["orthographic_sensor_height_extent"], enabled=False)
 
     def _build_airborne_lidar_sensor(self):
         with ui.VStack(spacing=SPACING):
@@ -480,12 +493,47 @@ class ObservationWindow(ui.Window):
         sensor_type = data.get("sensor_type")
         if sensor_type in ["Perspective", "Orthographic"]:
             create_optics_sensor(data)
-        # 创建光学传感器，xform类型的prim，直记录传递数值
+
+        # 创建激光雷达传感器，xform类型的prim，直记录传递数值
         elif sensor_type in ["Airborne LiDAR", "Terrestrial LiDAR", "Spaceborne LiDAR (Waveform LiDAR Data)"]:
             asyncio.ensure_future(create_LiDAR_carrier(data))
 
         # 保存当前窗口文件至simulation_parameters.json文件
         ObservationUtils.save_UI_data_to_json(self.models)
+
+    def _fn_orthographic_extent_binding(self):
+        """
+        正射相机宽度和高度范围的联动,高度随宽度和像素比例改变,且不能用户设定高度
+        """
+
+        # 如果已经绑定回调则跳过
+        if self._orthographic_binding_initialized:
+            return
+
+        # 获取UI接口model
+        width_model = self.models["orthographic_sensor_width_extent"]
+        height_model = self.models["orthographic_sensor_height_extent"]
+        sensor_pixels_width_model = self.models["optical_sensor_pixels"][0]
+        sensor_pixels_height_model = self.models["optical_sensor_pixels"][1]
+
+        # 回调函数
+        def _update_height_extent(model):
+            # 计算宽高比例
+            sensor_pixels = [i.as_int for i in self.models["optical_sensor_pixels"]]
+            aspect_ratio = sensor_pixels[1]/sensor_pixels[0]
+            # 计算新高度
+            current_width = (self.models["orthographic_sensor_width_extent"].as_float)
+            new_height = (current_width * aspect_ratio)
+            # 设定新高度
+            height_model.set_value(new_height)
+
+        # 设定回调
+        width_model.add_value_changed_fn(_update_height_extent)
+        sensor_pixels_width_model.add_value_changed_fn(_update_height_extent)
+        sensor_pixels_height_model.add_value_changed_fn(_update_height_extent)
+
+        # 更新回调状态
+        self._orthographic_binding_initialized = True
 
     def get_data(self):
         return {

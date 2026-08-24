@@ -19,7 +19,7 @@ OBSERVATION_CONFIG = {
     },
     "Orthographic": {  # 正交相机
         "rapid:sensor:optical_sensor_pixels": (Sdf.ValueTypeNames.Float2, "optical_sensor_pixels"),
-        "rapid:sensor:orthographic_sensor_extent": (Sdf.ValueTypeNames.Float, "orthographic_sensor_extent"),
+        "rapid:sensor:orthographic_sensor_width_extent": (Sdf.ValueTypeNames.Float, "orthographic_sensor_width_extent"),
     },
     "Single Sampling": {
         "rapid:sensor:single_sampling:sensor_position": (Sdf.ValueTypeNames.Float3, "single_sampling_sensor_position"),

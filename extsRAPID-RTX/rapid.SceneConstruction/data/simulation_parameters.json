@@ -1,7 +1,7 @@
 {
     "SceneConstruction": {
-        "select_sun_light_path": "/Light/Sun_Light",
-        "select_sky_light_path": "/Light/Sky_Light",
+        "select_sun_light_path": "/Light/Direct_Sun_Light",
+        "select_sky_light_path": "/Light/Diffuse_Sky_Light",
         "light_look_at_target": [0.0, 0.0, 0.0],
         "light_zenith_and_azimuth": [45.0, 0.0],
         "terrain_type_model": "Simple Plane",

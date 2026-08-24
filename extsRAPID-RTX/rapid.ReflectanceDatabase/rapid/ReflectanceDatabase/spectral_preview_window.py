@@ -6,7 +6,7 @@ from pathlib import Path
 import omni.kit.notification_manager as nm
 from omni.kit.window.filepicker import FilePickerDialog
 from rapid.Utility import project_validity_check  # 项目有效性检查
-from .reflectanceDatabase_utils import save_UI_data_to_json, read_csv_file, get_spectrum_data_for_bands, load_all_spectra_data
+from .reflectanceDatabase_utils import save_UI_data_to_json, read_csv_file, get_spectrum_data_for_bands, read_spectra_file_path
 
 
 class SpectralPreviewWindow(ui.Window):
@@ -35,8 +35,8 @@ class SpectralPreviewWindow(ui.Window):
 
         # 执行扫描光谱文件逻辑
         self.database_index.clear()
-        self.database_index = load_all_spectra_data(self.default_parameters_path,
-                                                    self.project_parameters_path)
+        self.database_index = read_spectra_file_path(self.default_parameters_path,
+                                                     self.project_parameters_path)
         # 构建UI
         self._build_spectral_preview_window()
 
@@ -79,24 +79,29 @@ class SpectralPreviewWindow(ui.Window):
 
     def _callback_import_spectral_data(self, filename: str, dirname: str):
         """光谱数据文件选择后的回调, 将被选择的光谱数据文件导入项目文件夹
-        并修改index文件, 向其中加入新的光谱数据文件名"""
+        并修改parameter文件, 向其中加入新的光谱数据文件名"""
         # 检查窗口
         if not filename or not dirname:
             if self._import_spectral_file_picker:
                 self._import_spectral_file_picker.hide()
             return
-        # 复制文件
-        src_csv_path = Path(dirname) / filename
-        shutil.copy2(src_csv_path, self.project_spectra_database_path / filename)
 
-        # 3. 更新 simulation_parameters.json
+        # 1. 文件路径
+        src_csv_path = Path(dirname) / filename
+        project_csv_path = self.project_spectra_database_path / filename
+
+        # 2. 导入CSV
+        if src_csv_path.resolve() != project_csv_path.resolve():
+            shutil.copy2(src_csv_path, project_csv_path)  # 如果不是数据库中的文件，则复制
+
+        # 3. 更新 simulation_parameters.json的光谱文件信息
         self._update_index_json(name=filename.replace(".csv", ""), file_name=filename)
 
         # 4. 重新加载并刷新列表
-        self.database_index.clear()
-        self.database_index = load_all_spectra_data(self.default_parameters_path,
-                                                    self.project_parameters_path)
-        self._refresh_list_ui()
+        self.database_index.clear()  # 先清空之前的字典
+        self.database_index = read_spectra_file_path(self.default_parameters_path,
+                                                     self.project_parameters_path)  # CSV光谱文件路径
+        self._refresh_list_ui()  # 加载光谱数据到UI表格中
         print(f"Imported: {filename}")
 
         # 关闭窗口
@@ -105,7 +110,7 @@ class SpectralPreviewWindow(ui.Window):
             self._import_spectral_file_picker = None
 
     def _update_index_json(self, name, file_name):
-        """向项目 simulation_parameters.json 添加一条记录"""
+        """向项目 simulation_parameters.json的光谱文件信息中 添加一条记录"""
         data = {"spectra_data_info": []}
         if self.project_parameters_path.exists():
             with open(self.project_parameters_path, 'r') as f:
@@ -176,8 +181,8 @@ class SpectralPreviewWindow(ui.Window):
 
         # 4. 刷新
         self.database_index.clear()
-        self.database_index = load_all_spectra_data(self.default_parameters_path,
-                                                    self.project_parameters_path)
+        self.database_index = read_spectra_file_path(self.default_parameters_path,
+                                                     self.project_parameters_path)
         self._refresh_list_ui()
         self.current_spectrum_name = None
         print(f"Deleted: {csv_path.name}")
@@ -232,7 +237,7 @@ class SpectralPreviewWindow(ui.Window):
                         style={"text_alignment": ui.Alignment.LEFT})
 
     def _refresh_list_ui(self):
-        """刷新左侧数据库列表 UI"""
+        """刷新左侧数据库列表 UI,实际上是一堆ui.Button按钮"""
         if not self._list_stack:  # 如果 UI 还没建好，就不刷新
             return
         self._list_stack.clear()

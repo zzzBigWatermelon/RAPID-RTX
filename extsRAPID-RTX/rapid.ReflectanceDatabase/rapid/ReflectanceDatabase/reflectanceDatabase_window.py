@@ -13,7 +13,7 @@ import omni.kit.notification_manager as nm
 # 自定义模块
 from rapid.Utility.window_components_combo_box_model import ComboBoxModel
 from rapid.Utility import project_validity_check
-from .reflectanceDatabase_utils import parse_str_to_float_list, parse_UI_data_to_dic, get_spectrum_data_for_bands, load_all_spectra_data, save_UI_data_to_json, parse_json_to_UI_format
+from .reflectanceDatabase_utils import parse_str_to_float_list, parse_UI_data_to_dic, get_spectrum_data_for_bands, read_spectra_file_path, save_UI_data_to_json, parse_json_to_UI_format
 from .stage_material_manager import updata_stage_materials, delete_stage_material
 from .spectral_preview_window import SpectralPreviewWindow
 from .spectral_database_table_model import TableModel, TableDelegate
@@ -471,8 +471,8 @@ class ReflectanceDatabaseWindow(ui.Window):
         # 获取simulation_parameters.json文件路径,返回其中的的光谱信息内容
         default_parameters_path = Path(__file__).parent.parent.parent/'data'
         project_parameters_path = Path(project_validity_check.get_folder("parameters"))
-        spectra_database = load_all_spectra_data(default_parameters_path/"simulation_parameters.json",
-                                                 project_parameters_path/"simulation_parameters.json")
+        spectra_database = read_spectra_file_path(default_parameters_path/"simulation_parameters.json",
+                                                  project_parameters_path/"simulation_parameters.json")
         # 存贮新数据用于重置表格
         new_data = []
         for index, spectra_name in enumerate(all_names):

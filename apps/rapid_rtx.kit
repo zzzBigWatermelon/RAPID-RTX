@@ -8,7 +8,7 @@ keywords = ["experience", "app", "usd", "isaacsim"] # That makes it browsable in
 
 [dependencies]
 "isaacsim.exp.base" = {}
-"omni.kit.window.splash" = {}  # 
+"omni.kit.window.splash" = {}  # 需要提前加载启动画面的扩展
 
 # Additional Isaac Sim extensions
 "isaacsim.app.setup" = { order = 1000 }
@@ -133,6 +133,7 @@ keywords = ["experience", "app", "usd", "isaacsim"] # That makes it browsable in
 "omni.stats" = {}
 "omni.usd.metrics.assembler.physics" = {}
 "omni.usd.schema.scene.visualization" = {}
+# 需额外开启的omni扩展
 "omni.kit.language.core" = {}
 "omni.kit.language.simplified_chinese" = {}  # 启动简体中文
 
@@ -147,11 +148,11 @@ keywords = ["experience", "app", "usd", "isaacsim"] # That makes it browsable in
 "rapid.ReflectanceDatabase" = { version = "1.0.0" }
 "rapid.Property" = { version = "1.0.0" }
 "rapid.NewProject" = { version = "1.0.0" }
-# "rapid.ExampleScene" = { version = "1.0.0" }
 "rapid.Tools" = { version = "1.0.0" }
+"rapid.unitree_lidarl2" = { version = "1.0.0" }
+"rapid.chat_rapid" = { version = "1.0.0" }
 # "rapid.DataAssimilation" = { version = "1.0.0" }
-
-
+# "rapid.ExampleScene" = { version = "1.0.0" }
 
 
 [dependencies."filter:platform"."windows-x86_64"] # (Filtered for x86_64 platforms)
@@ -170,16 +171,15 @@ exts."isaacsim.core.throttling".enable_manualmode = true
 # 启动图路径，相对于应用目录的相对路径
 exts."omni.kit.window.splash".imagePath = "${app}/../extsRAPID-RTX/rapid.SplashScreen/data/splash_screen.png"
 
-
 [settings.app]
 name = "RAPID-RTX"
 version = "1.0"
-file.ignoreUnsavedOnExit = false
+file.ignoreUnsavedStage = false
 window.title = "RAPID-RTX"
-vulkan = false                          # Explicitly enable Vulkan
+vulkan = false                         # 不启用 Vulkan，Vulkan下会造成画面闪烁
 enableDeveloperWarnings = false        # Disable developer warnings to reduce log noise
 runLoops.main.rateLimitEnabled = true  # Enable rate limiting, simulation runs at specified rendering rate (default 60 hz)
-runLoops.main.manualModeEnabled = false # Enable manual mode, dt is fixed at requested rate
+runLoops.main.manualModeEnabled = true # Enable manual mode, dt is fixed at requested rate
 player.useFixedTimeStepping = true     # Disable fixed time stepping, dt is controlled by loop runner
 
 
@@ -198,7 +198,7 @@ isaac.startup.ros_bridge_extension = "isaacsim.ros2.bridge"
     "${app}/../extscache",
     "${app}/../extsUser",
     "${app}/../extsDeprecated",
-    "${app}/../extsRAPID-RTX",
+    "${app}/../extsRAPID-RTX",  # 增加RAPID-RTX扩展的路径
 ]
 
 [settings.exts."omni.kit.registry.nucleus"]
