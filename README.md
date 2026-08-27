@@ -64,7 +64,7 @@ Double-click RAPID-RTX.exe to run the program.
 - Please use GitHub [Discussions](https://github.com/zzzBigWatermelon/RAPID-RTX/discussions) for discussing ideas, asking questions, and requests for new features.
 - For any questions, suggestions, or to seek cooperation, please contact me via the following email address: zzz_zhang666@163.com;huaguo_huang@bjfu.edu.cn
 - Video tutorials (Chinese):https://space.bilibili.com/345754400?spm_id_from=333.1007.0.0
-- User Manual: After opening the program, please select User Manual from the support menu in the upper left corner.
+- User Manual: After opening the program, please select User Manual from the Support menu in the upper left corner.Alternatively, you can find the user manual directly in .\extsRAPID-RTX\rapid.Support\data.
 
 ## Citation
 

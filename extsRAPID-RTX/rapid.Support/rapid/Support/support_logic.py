@@ -26,8 +26,8 @@ def on_about_button_clicked(ext):
 
                 with ui.VStack(spacing=5):
                     ui.Label("RAPID-RTX", style={"font_size": 28, "color": 0xFF00FF00, "font_weight": "bold"})
-                    ui.Label("Version: 0.1.0", style={"color": 0xAAFFFFFF})
-                    ui.Label("Date: 2026-02-05", style={"color": 0x88FFFFFF})
+                    ui.Label("Version: 1.0.0", style={"color": 0xAAFFFFFF})
+                    ui.Label("Date: 2026-08-27", style={"color": 0x88FFFFFF})
 
             ui.Line(style={"color": 0x33FFFFFF})
 
@@ -40,9 +40,11 @@ def on_about_button_clicked(ext):
                                           "border_radius": 5}):
                 with ui.VStack(margin=10):
                     description_text = (
-                        "RAPID-RTX is a high-performance 3D Radiative Transfer Model (RTM) simulation platform built on NVIDIA Isaac Sim/Omniverse. "
-                        "Leveraging RTX and OpenUSD technologies, It inherits and evolves from the previous RAPID (Radiosity Applicable to Porous IndiviDual Objects) framework. "
-                        "Developed with Python and C++, RAPID-RTX is capable of simulating diverse remote sensing datasets and high-fidelity imagery within large-scale, complex 3D environments."
+                        'RAPID-RTX is a high-performance 3D Radiative Transfer Model (RTM) simulation platform based on NVIDIA Isaac Sim. '
+                        'Developed in Python, it supports the rapid generation of high-fidelity remote sensing imagery and point cloud data in large and complex 3D environments. '
+                        'The platform integrates a GPU-accelerated ray tracing engine, possessing multi-sensor, multi-angle, and multispectral simulation capabilities, '
+                        'covering mainstream remote sensing payloads such as optical and lidar (point cloud/full waveform). It also includes a built-in AI-driven scene generation module, '
+                        'significantly improving simulation efficiency and scene diversity.'
                     )
                     ui.Label(description_text, word_wrap=True, style={"color": 0xCCFFFFFF})
 
