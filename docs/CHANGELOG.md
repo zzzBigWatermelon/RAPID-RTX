@@ -2,7 +2,7 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.0.0] - 2026-8-24
+## [1.0.0] - 2026-8-26
 
 ### 新增
 
@@ -18,6 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - [rapid.ReflectanceDatabase(spectral_preview_window.py)]修复 CSV 文件创建路径与源文件冲突导致反射率数据无法导入的问题
 - [rapid.Observation]优化了正射相机配置逻辑：用户仅需输入宽度范围，系统将根据图像宽高比自动计算对应的范围。
 - [rapid.ExampleScenes]移除 ExampleScenes 扩展以减小存储占用，所有示例场景已迁移至GitHub的USD-Scenes仓库中。
+- [rapid.ReflectanceDatabase] 优化表格编辑交互：将双击进入编辑状态改为单击触发，提升操作灵敏度与响应速度。 
+- [rapid.ReflectanceDatabase] 限制 Name 列为只读：该列值与 CSV 文件名强绑定，禁止修改以防止数据不一致。
 
 ### 已知问题
 
