@@ -31,8 +31,7 @@ class SceneConstructionModifier(NetworkModifier):
         r'\s*(\d+)\s*,'
         r'\s*([\d.]+)\s*,'
         r'\s*([\d.]+)'
-        r'\s*\)@'
-    )
+        r'\s*\)@')
 
     # GenerateForest
     FOREST_PATTERN = (
@@ -41,8 +40,7 @@ class SceneConstructionModifier(NetworkModifier):
         r'\s*([\d.]+)\s*,'
         r'\s*"([^"]+)"\s*,'
         r'\s*([\d.]+)'
-        r'\s*\)@'
-    )
+        r'\s*\)@')
 
     async def on_post_invoke_async(self, network: "RunnableNetwork", node: RunnableNode):
 

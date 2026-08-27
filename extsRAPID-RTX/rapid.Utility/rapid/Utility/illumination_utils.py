@@ -41,12 +41,12 @@ class IlluminationUtils:
             sky_diffuse_fraction,
             solar_energy_scale)
 
-        # 3. 创建并配置 SunLight (DiskLight)
+        # 3. 创建并配置 SunLight (Distant Light)
         # 即使传入的路径不是以 /Light 开头，USD 也会根据路径自动创建层级
         sun_light = UsdLux.DistantLight.Define(stage, direct_sun_light_path)
         sun_light.GetIntensityAttr().Set(light_intensity[0])
         # UsdLux.DistantLight默认太阳角是0.53，配置文件中也是默认0.53
-        # sun_light.GetAngleyAttr().Set(0.53)
+        # sun_light.GetAngleAttr().Set(0.53)
 
         # 3. 创建并配置 DomeLight (SkyLight)
         sky_light = UsdLux.DomeLight.Define(stage, diffuse_sky_light_path)

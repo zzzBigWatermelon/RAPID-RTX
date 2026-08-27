@@ -437,9 +437,11 @@ class ReflectanceDatabaseWindow(ui.Window):
                 root_visible=False,
                 header_visible=True,
                 columns_resizable=True,
-                # 稍微调整一下列宽比例
+                # 稍微调整一下列宽比例,
+                selection=[],
                 column_widths=[ui.Fraction(1.5), ui.Fraction(1.5), ui.Fraction(1)]
             )
+        self._delegate.bind_tree_view(self._tree_view)
 
     def _on_refresh_clicked(self):
         '''根据现有表格中的name和.models["bands"]中的波长,再重新更新一边表格的反射率/透射率'''

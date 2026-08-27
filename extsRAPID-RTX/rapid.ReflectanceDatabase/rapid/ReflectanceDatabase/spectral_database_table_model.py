@@ -2,227 +2,1187 @@ import omni.ui as ui
 import asyncio
 import omni.kit.app
 from isaacsim.gui.components.style import get_style
-import os
 from pathlib import Path
 
 
-# 颜色定义
-COLOR_NORMAL = 0xFF222222      # 普通背景 (深灰)
-COLOR_SELECTED = 0xFFD06020    # 选中高亮 (亮蓝色)
+import omni.ui as ui
+from pathlib import Path
+
+
+# ============================================================
+# Colors
+# ============================================================
+
+COLOR_NORMAL = 0xFF222222
 COLOR_BORDER = 0xFF444444
-# 样式常量
+
+COLOR_HEADER = 0xFF3A3A3A
+COLOR_HEADER_BORDER = 0xFF555555
+COLOR_HEADER_TEXT = 0xFFAAAAAA
+
+# 当前选中 Cell 的编辑背景
+COLOR_EDITING = 0xFF151515
+
+# RGB
 COLOR_R = 0xFF5353FF
 COLOR_G = 0xFF76D321
 COLOR_B = 0xFF21A0FF
-# 加大后的标签尺寸
+
 RGB_LABEL_WIDTH = 35
 RGB_FIELD_HEIGHT = 30
-TITLE_WIDTH = 100      # 左侧统一标题宽度
-DATA_ROOT = Path(__file__).parent.parent.parent/'data'
+TITLE_WIDTH = 100
+
+DATA_ROOT = Path(__file__).parent.parent.parent / "data"
 
 
-# 表格UI的模型
+# ============================================================
+# Table Item
+# ============================================================
+
 class TableItem(ui.AbstractItem):
     """
-    参考omni.example.ui.tree_view.py
-    根据列的类型自动选择 StringModel 还是 FloatModel
+    表格中的一行。
+
+    一个 TableItem 对应 TreeView 中的一行。
     """
-    def __init__(self, param_name, ref, tra, display_color="1.0, 1.0, 1.0"):
+
+    def __init__(
+        self,
+        param_name,
+        ref,
+        tra,
+        display_color="1.0, 1.0, 1.0"
+    ):
         super().__init__()
-        # 第1列: String
-        self.name_model = ui.SimpleStringModel(str(param_name))
-        # 第2列: String
-        self.ref_value_model = ui.SimpleStringModel(str(ref))
-        # 第3列: String
-        self.tra_value_model = ui.SimpleStringModel(str(tra))
-        # 第3列: String
-        self.display_color_model = ui.SimpleStringModel(str(display_color))
 
-        # 每一行都有一个布尔模型，控制是否高亮
-        self.is_selected_model = ui.SimpleBoolModel(False)
+        # Column 0
+        self.name_model = ui.SimpleStringModel(
+            str(param_name)
+        )
 
+        # Column 1
+        self.ref_value_model = ui.SimpleStringModel(
+            str(ref)
+        )
+
+        # Column 2
+        self.tra_value_model = ui.SimpleStringModel(
+            str(tra)
+        )
+
+        # Column 3
+        self.display_color_model = ui.SimpleStringModel(
+            str(display_color)
+        )
+
+
+# ============================================================
+# Table Model
+# ============================================================
 
 class TableModel(ui.AbstractItemModel):
-    '''参考omni.example.ui.tree_view.py
-    '''
-    def __init__(self, headers, data):
-        super().__init__()
-        # headers应该包含四列内容，与TableItem相同
-        self.headers = headers
-        self._items = [TableItem(*row) for row in data]
+    """
+    TreeView 数据模型。
+    """
 
-    def get_item_children(self, item):
+    def __init__(
+        self,
+        headers,
+        data
+    ):
+        super().__init__()
+
+        self.headers = headers
+
+        self._items = [
+            TableItem(*row)
+            for row in data
+        ]
+
+    # --------------------------------------------------------
+    # TreeView hierarchy
+    # --------------------------------------------------------
+
+    def get_item_children(
+        self,
+        item
+    ):
         return self._items if item is None else []
 
-    def get_item_value_model_count(self, item):
+    # --------------------------------------------------------
+    # Column count
+    # --------------------------------------------------------
+
+    def get_item_value_model_count(
+        self,
+        item
+    ):
         return len(self.headers)
 
-    def get_item_value_model(self, item, column_id):
+    # --------------------------------------------------------
+    # Column value model
+    # --------------------------------------------------------
+
+    def get_item_value_model(
+        self,
+        item,
+        column_id
+    ):
+
         if item is None:
             return None
-        # 根据列 ID 返回对应的 Model
+
         if column_id == 0:
             return item.name_model
+
         elif column_id == 1:
             return item.ref_value_model
+
         elif column_id == 2:
             return item.tra_value_model
+
         elif column_id == 3:
             return item.display_color_model
+
         return None
 
-    def reset_data(self, new_data_list):
-        """清空旧数据并加载新数据"""
+    # --------------------------------------------------------
+    # Reset
+    # --------------------------------------------------------
+
+    def reset_data(
+        self,
+        new_data_list
+    ):
+
         self._items.clear()
+
         for row in new_data_list:
-            if len(row) >= 4:  # 确保数据长度足够
-                self._items.append(TableItem(row[0], row[1], row[2], row[3]))
-            elif len(row) == 3:  # 兼容旧的3列格式数据
-                self._items.append(TableItem(row[0], row[1], row[2], "1,1,1"))
-        # 通知 UI 全局重绘
+
+            if len(row) >= 4:
+
+                self._items.append(
+                    TableItem(
+                        row[0],
+                        row[1],
+                        row[2],
+                        row[3]
+                    )
+                )
+
+            elif len(row) == 3:
+
+                self._items.append(
+                    TableItem(
+                        row[0],
+                        row[1],
+                        row[2],
+                        "1,1,1"
+                    )
+                )
+
         self._item_changed(None)
 
-    def add_row(self, name, ref, tra, display_color="1,1,1"):
-        '''新增行'''
-        item = TableItem(name, ref, tra, display_color)
-        self._items.append(item)
+    # --------------------------------------------------------
+    # Add row
+    # --------------------------------------------------------
+
+    def add_row(
+        self,
+        name,
+        ref,
+        tra,
+        display_color="1,1,1"
+    ):
+
+        self._items.append(
+            TableItem(
+                name,
+                ref,
+                tra,
+                display_color
+            )
+        )
+
         self._item_changed(None)
 
-    def remove_items(self, items_to_delete):
-        '''删除行'''
+    # --------------------------------------------------------
+    # Remove
+    # --------------------------------------------------------
+
+    def remove_items(
+        self,
+        items_to_delete
+    ):
+
         dirty = False
+
         for item in items_to_delete:
+
             if item in self._items:
+
                 self._items.remove(item)
+
                 dirty = True
+
         if dirty:
+
             self._item_changed(None)
 
-    # 处理选中逻辑
-    def set_single_selection(self, target_item):
-        """将目标设为选中，其他全部取消选中"""
-        for item in self._items:
-            # 如果是目标，设为 True；否则设为 False
-            is_target = (item == target_item)
-            if item.is_selected_model.as_bool != is_target:
-                item.is_selected_model.as_bool = is_target
 
+# ============================================================
+# Table Delegate
+# ============================================================
 
 class TableDelegate(ui.AbstractItemDelegate):
-    def __init__(self, model):
-        super().__init__()
-        self._model = model
-        self._subscriptions = {}
-        self.label_height = 24
 
-    def build_branch(self, model, item, column_id, level, expanded):
+    def __init__(
+        self,
+        model
+    ):
+
+        super().__init__()
+
+        self._model = model
+
+        # ----------------------------------------------------
+        # TreeView reference
+        # ----------------------------------------------------
+
+        self._tree_view = None
+
+        # ----------------------------------------------------
+        # 当前选中的 Item
+        # ----------------------------------------------------
+
+        self._selected_item = None
+
+        # ----------------------------------------------------
+        # 当前正在编辑的 Cell
+        #
+        # (item, column_id)
+        # ----------------------------------------------------
+
+        self._editing_item = None
+        self._editing_column = None
+
+        # ----------------------------------------------------
+        # Widget references
+        #
+        # key:
+        #     (id(item), column_id)
+        #
+        # value:
+        #     dict
+        #
+        # ----------------------------------------------------
+
+        self._cell_widgets = {}
+
+        # ----------------------------------------------------
+        # Value subscriptions
+        # ----------------------------------------------------
+
+        self._subscriptions = {}
+
+        # ----------------------------------------------------
+        # Row height
+        # ----------------------------------------------------
+
+        self.label_height = 30
+
+    # ========================================================
+    # Bind TreeView
+    # ========================================================
+
+    def bind_tree_view(
+        self,
+        tree_view
+    ):
+        """
+        将 Delegate 与 TreeView 绑定。
+
+        TreeView 负责真正的 Selection。
+        Delegate 只响应 Selection 状态变化。
+        """
+
+        self._tree_view = tree_view
+
+        # TreeView 原生 Selection callback
+        tree_view.set_selection_changed_fn(
+            self._on_selection_changed
+        )
+
+    # ========================================================
+    # TreeView Selection Changed
+    # ========================================================
+
+    def _on_selection_changed(
+        self,
+        selections
+    ):
+        """
+        TreeView 原生 Selection 回调。
+
+        selections:
+            List[AbstractItem]
+
+        通常单选模式下只会包含一个 Item。
+        """
+
+        # ----------------------------------------------------
+        # 没有选择
+        # ----------------------------------------------------
+
+        if not selections:
+
+            self._selected_item = None
+
+            self._editing_item = None
+            self._editing_column = None
+
+            self._update_all_cells()
+
+            return
+
+        # ----------------------------------------------------
+        # 当前选中的 Item
+        # ----------------------------------------------------
+
+        selected_item = selections[0]
+
+        # ----------------------------------------------------
+        # 如果切换到了新的 Item
+        # ----------------------------------------------------
+
+        if selected_item is not self._selected_item:
+
+            # 结束之前的编辑
+            self._finish_edit()
+
+            self._selected_item = selected_item
+
+            # ------------------------------------------------
+            # 注意：
+            #
+            # 这里只更新选中状态。
+            #
+            # 具体哪一列进入编辑，由 Cell click 决定。
+            #
+            # ------------------------------------------------
+
+            self._update_all_cells()
+
+    # ========================================================
+    # Header
+    # ========================================================
+
+    def build_header(
+        self,
+        column_id
+    ):
+
+        title = ""
+
+        if (
+            self._model is not None
+            and column_id < len(self._model.headers)
+        ):
+            title = self._model.headers[column_id]
+
+        with ui.ZStack(
+            height=self.label_height
+        ):
+
+            ui.Rectangle(
+                style={
+                    "background_color": COLOR_HEADER,
+                    "border_color": COLOR_HEADER_BORDER,
+                    "border_width": 1,
+                }
+            )
+
+            ui.Label(
+                title,
+                alignment=ui.Alignment.CENTER,
+                style={
+                    "color": COLOR_HEADER_TEXT,
+                    "font_size": 14,
+                }
+            )
+
+    # ========================================================
+    # Branch
+    # ========================================================
+
+    def build_branch(
+        self,
+        model,
+        item,
+        column_id,
+        level,
+        expanded
+    ):
         pass
 
-    def build_header(self, column_id):
-        title = self._model.headers[column_id] if self._model and column_id < len(self._model.headers) else ""
-        with ui.ZStack(height=self.label_height):
-            ui.Rectangle(style={"background_color": 0xFF3A3A3A, "border_color": 0xFF555555, "border_width": 1})
-            ui.Label(title, alignment=ui.Alignment.CENTER, style={"color": 0xFFAAAAAA, "font_size": 14})
+    # ========================================================
+    # Build Cell
+    # ========================================================
 
-    def build_widget(self, model, item, column_id, level, expanded):
+    def build_widget(
+        self,
+        model,
+        item,
+        column_id,
+        level,
+        expanded
+    ):
+
         if item is None:
             return
 
-        value_model = model.get_item_value_model(item, column_id)
+        value_model = model.get_item_value_model(
+            item,
+            column_id
+        )
 
-        # 容器
-        stack = ui.ZStack(height=self.label_height)
-        with stack:
-            # 1. 默认背景 (深灰) - 永远显示
-            ui.Rectangle(style={"background_color": COLOR_NORMAL, "border_color": COLOR_BORDER, "border_width": 1})
+        if value_model is None:
+            return
 
-            # 2. 高亮背景 (亮蓝) - 默认隐藏，覆盖在普通背景上
-            # 这里我们不依赖 redraw，而是让它一直存在，只控制 visible
-            highlight_rect = ui.Rectangle(
-                style={"background_color": COLOR_SELECTED},
-                visible=item.is_selected_model.as_bool  # 初始状态
+        # ====================================================
+        # Cell key
+        # ====================================================
+
+        cell_key = (
+            id(item),
+            column_id
+        )
+
+        # ====================================================
+        # 当前是否正在编辑
+        # ====================================================
+
+        is_editing = (
+            self._editing_item is item
+            and self._editing_column == column_id
+        )
+
+        # ====================================================
+        # Cell
+        # ====================================================
+
+        with ui.ZStack(
+            height=self.label_height
+        ):
+
+            # ------------------------------------------------
+            # Background
+            # ------------------------------------------------
+
+            ui.Rectangle(
+                style={
+                    "background_color": (
+                        COLOR_EDITING
+                        if is_editing
+                        else COLOR_NORMAL
+                    ),
+                    "border_color": COLOR_BORDER,
+                    "border_width": 1,
+                }
             )
 
-            with ui.HStack(spacing=5):
-                ui.Spacer(width=5)
+            # =================================================
+            # Column 0 ~ 2
+            # =================================================
 
-                # 第四列：显示颜色方块
-                if column_id == 3:
-                    color_preview = ui.Rectangle(width=16, height=16)
+            if column_id in (0, 1, 2):
 
-                    def update_color_rect(m, rect=color_preview):
-                        try:
-                            parts = [float(x.strip()) for x in m.as_string.split(',')]
-                            if len(parts) >= 3:
-                                rect.style = {"background_color": ui.color(parts[0], parts[1], parts[2], 1.0), "border_radius": 3}
-                        except Exception:
-                            print(f"Color parse error: {e}")
-                            rect.style = {"background_color": 0xFF888888}
+                self._build_text_cell(
+                    item,
+                    column_id,
+                    value_model,
+                    is_editing,
+                    cell_key
+                )
 
-                    update_color_rect(value_model)
-                    self._subscriptions[id(color_preview)] = value_model.subscribe_value_changed_fn(update_color_rect)
+            # =================================================
+            # Column 3
+            # =================================================
 
-                # 文本层
-                label = ui.Label(value_model.as_string, alignment=ui.Alignment.LEFT_CENTER)
+            elif column_id == 3:
 
-                # 订阅文本变化
-                def update_label(m, l=label):
-                    l.text = m.as_string
-                self._subscriptions[f"{id(item)}_{column_id}_label"] = value_model.subscribe_value_changed_fn(update_label)
+                self._build_color_cell(
+                    item,
+                    value_model,
+                    cell_key
+                )
 
-            # 4. 透明点击捕获层 (Hit Cover)
-            hit_cover = ui.Rectangle(style={"background_color": 0x01000000}, visible=True)
+    # ========================================================
+    # Text Cell
+    # ========================================================
 
-            # 5. 编辑框 (最上层)
-            field = ui.StringField(value_model, visible=False, style={"background_color": 0xFF000000})
+    def _build_text_cell(
+        self,
+        item,
+        column_id,
+        value_model,
+        is_editing,
+        cell_key
+    ):
 
-        # --- 绑定双击事件 ---
-        # 我们需要把 column_id 传给 _start_edit
-        hit_cover.set_mouse_double_clicked_fn(
-            lambda x, y, b, m, f=field, l=label, c=column_id, mod=value_model: 
-            self._start_edit(b, f, l, c, mod)
+        # ========================================================
+        # Column 0: Parameter Name
+        #
+        # 第一列永远不可编辑
+        # ========================================================
+
+        if column_id == 0:
+
+            with ui.HStack(
+                spacing=0
+            ):
+
+                ui.Spacer(
+                    width=6
+                )
+
+                ui.Label(
+                    value_model.as_string,
+                    alignment=ui.Alignment.LEFT_CENTER,
+                )
+
+                ui.Spacer(
+                    width=6
+                )
+
+            # ----------------------------------------------------
+            # Name 发生变化时，只更新 Label
+            # ----------------------------------------------------
+
+            sub_key = f"label_{id(item)}_{column_id}"
+
+            old_sub = self._subscriptions.pop(
+                sub_key,
+                None
+            )
+
+            if old_sub is not None:
+
+                try:
+                    old_sub.unsubscribe()
+                except Exception:
+                    pass
+
+            subscription = (
+                value_model.subscribe_value_changed_fn(
+                    lambda model,
+                    l=None:
+                    None
+                )
+            )
+
+            # Name 与csv文件名绑定，不能修改
+            
+            return
+
+        # ========================================================
+        # Column 1 / 2
+        #
+        # Reference / Transmission
+        # ========================================================
+
+        if is_editing:
+
+            with ui.HStack(
+                spacing=0
+            ):
+
+                ui.Spacer(
+                    width=4
+                )
+
+                field = ui.StringField(
+                    value_model,
+                    height=self.label_height - 2,
+                    style={
+                        "background_color": COLOR_EDITING,
+                        "border_width": 0,
+                    }
+                )
+
+                ui.Spacer(
+                    width=4
+                )
+
+            self._cell_widgets[cell_key] = {
+                "field": field,
+                "item": item,
+                "column": column_id,
+            }
+
+            sub_key = (
+                f"edit_{id(item)}_{column_id}"
+            )
+
+            old_sub = self._subscriptions.pop(
+                sub_key,
+                None
+            )
+
+            if old_sub is not None:
+
+                try:
+                    old_sub.unsubscribe()
+                except Exception:
+                    pass
+
+            subscription = (
+                value_model.subscribe_end_edit_fn(
+                    lambda model,
+                    i=item,
+                    c=column_id:
+                    self._on_field_end_edit(
+                        i,
+                        c,
+                        model
+                    )
+                )
+            )
+
+            self._subscriptions[sub_key] = subscription
+
+            self._focus_field_next_frame(
+                field
+            )
+
+        # ========================================================
+        # Normal state
+        # ========================================================
+
+        else:
+
+            with ui.HStack(
+                spacing=0
+            ):
+
+                ui.Spacer(
+                    width=6
+                )
+
+                label = ui.Label(
+                    value_model.as_string,
+                    alignment=ui.Alignment.LEFT_CENTER,
+                )
+
+                ui.Spacer(
+                    width=6
+                )
+
+            sub_key = (
+                f"label_{id(item)}_{column_id}"
+            )
+
+            old_sub = self._subscriptions.pop(
+                sub_key,
+                None
+            )
+
+            if old_sub is not None:
+
+                try:
+                    old_sub.unsubscribe()
+                except Exception:
+                    pass
+
+            subscription = (
+                value_model.subscribe_value_changed_fn(
+                    lambda model,
+                    l=label:
+                    self._update_label(
+                        model,
+                        l
+                    )
+                )
+            )
+
+            self._subscriptions[sub_key] = subscription
+
+            # ----------------------------------------------------
+            # 只有 Reference / Transmission 可以点击编辑
+            # ----------------------------------------------------
+
+            label.set_mouse_pressed_fn(
+                lambda x,
+                y,
+                button,
+                modifier,
+                i=item,
+                c=column_id:
+                self._on_cell_pressed(
+                    i,
+                    c,
+                    button
+                )
+            )
+
+    # ========================================================
+    # Color Cell
+    # ========================================================
+
+    def _build_color_cell(
+        self,
+        item,
+        value_model,
+        cell_key
+    ):
+
+        with ui.HStack(
+            spacing=6
+        ):
+
+            ui.Spacer(
+                width=8
+            )
+
+            # ------------------------------------------------
+            # Color preview
+            # ------------------------------------------------
+
+            color_preview = ui.Rectangle(
+                width=18,
+                height=18
+            )
+
+            self._update_color_preview(
+                value_model,
+                color_preview
+            )
+
+            # ------------------------------------------------
+            # RGB text
+            # ------------------------------------------------
+
+            label = ui.Label(
+                value_model.as_string,
+                alignment=ui.Alignment.LEFT_CENTER
+            )
+
+            ui.Spacer(
+                width=4
+            )
+
+        # ----------------------------------------------------
+        # 保存
+        # ----------------------------------------------------
+
+        self._cell_widgets[cell_key] = {
+            "color_preview": color_preview,
+            "label": label,
+            "item": item,
+            "column": 3,
+        }
+
+        # ----------------------------------------------------
+        # RGB Model changed
+        # ----------------------------------------------------
+
+        sub_key = f"color_{id(item)}"
+
+        old_sub = self._subscriptions.pop(
+            sub_key,
+            None
         )
 
-        # 单击选中逻辑
-        hit_cover.set_mouse_pressed_fn(lambda x, y, b, m, i=item: self._on_single_click(b, i))
+        if old_sub is not None:
 
-        # 订阅高亮
-        sub_id_vis = id(highlight_rect)
-        self._subscriptions[sub_id_vis] = item.is_selected_model.subscribe_value_changed_fn(
-            lambda m, w=highlight_rect: setattr(w, "visible", m.as_bool)
+            try:
+                old_sub.unsubscribe()
+            except Exception:
+                pass
+
+        subscription = (
+            value_model.subscribe_value_changed_fn(
+                lambda model,
+                rect=color_preview,
+                l=label:
+                self._on_color_changed(
+                    model,
+                    rect,
+                    l
+                )
+            )
         )
 
-    def _on_single_click(self, button, item):
-        if button == 0:  # 左键
-            # 这会触发 subscribe_value_changed_fn，瞬间切换显隐
-            self._model.set_single_selection(item)
+        self._subscriptions[sub_key] = subscription
 
-    def _start_edit(self, button, field, label, column_id, model):
+        # ----------------------------------------------------
+        # 点击 Color
+        # ----------------------------------------------------
+
+        label.set_mouse_pressed_fn(
+            lambda x,
+            y,
+            button,
+            modifier,
+            i=item:
+            self._on_color_pressed(
+                i,
+                button
+            )
+        )
+
+        color_preview.set_mouse_pressed_fn(
+            lambda x,
+            y,
+            button,
+            modifier,
+            i=item:
+            self._on_color_pressed(
+                i,
+                button
+            )
+        )
+
+    # ========================================================
+    # Cell pressed
+    # ========================================================
+
+    def _on_cell_pressed(
+        self,
+        item,
+        column_id,
+        button
+    ):
+
         if button != 0:
             return
 
-        if column_id == 3:
-            # --- 第四列：弹出专业颜色选择器 ---
-            RGBColorPickerDialog(model)
-        else:
-            # --- 前三列：保持原有的文本输入模式 ---
-            field.visible = True
+        # ----------------------------------------------------
+        # 先让 TreeView 负责 Selection
+        # ----------------------------------------------------
 
-            async def focus_with_delay():
-                await omni.kit.app.get_app().next_update_async()
-                field.focus_keyboard()
-            asyncio.ensure_future(focus_with_delay())
+        if self._tree_view is not None:
 
-            sub_id = id(field)
-            self._subscriptions[sub_id] = field.model.subscribe_end_edit_fn(
-                lambda m, f=field, l=label, sid=sub_id: self._end_edit(m, f, l, sid)
+            # 已经是当前选择
+            if self._selected_item is not item:
+
+                self._tree_view.selection = [item]
+
+        # ----------------------------------------------------
+        # 记录要编辑的列
+        # ----------------------------------------------------
+
+        self._editing_item = item
+        self._editing_column = column_id
+
+        # ----------------------------------------------------
+        # TreeView Selection 改变后会 dirty widget。
+        #
+        # 如果当前 item 本来就是 selected，
+        # Selection callback 不一定会再次触发。
+        #
+        # 因此这里主动刷新。
+        # ----------------------------------------------------
+
+        self._update_all_cells()
+
+    # ========================================================
+    # Color pressed
+    # ========================================================
+
+    def _on_color_pressed(
+        self,
+        item,
+        button
+    ):
+
+        if button != 0:
+            return
+
+        # ----------------------------------------------------
+        # Selection
+        # ----------------------------------------------------
+
+        if self._tree_view is not None:
+
+            if self._selected_item is not item:
+
+                self._tree_view.selection = [item]
+
+        # ----------------------------------------------------
+        # 当前编辑列
+        # ----------------------------------------------------
+
+        self._editing_item = item
+        self._editing_column = 3
+
+        # ----------------------------------------------------
+        # 打开颜色选择器
+        # ----------------------------------------------------
+
+        value_model = (
+            item.display_color_model
+        )
+
+        try:
+
+            RGBColorPickerDialog(
+                value_model
             )
 
-    def _end_edit(self, model, field, label, sub_id):
-        field.visible = False
+        except Exception as e:
+
+            print(
+                "[TableDelegate] "
+                f"Failed to open RGBColorPickerDialog: {e}"
+            )
+
+        # ----------------------------------------------------
+        # 更新 UI
+        # ----------------------------------------------------
+
+        self._update_all_cells()
+
+    # ========================================================
+    # Selection / Editing refresh
+    # ========================================================
+
+    def _update_all_cells(self):
+
+        """
+        让 TreeView 在下一帧重新生成 Delegate widgets。
+        """
+
+        if self._tree_view is not None:
+
+            self._tree_view.dirty_widgets()
+
+    # ========================================================
+    # End edit
+    # ========================================================
+
+    def _on_field_end_edit(
+        self,
+        item,
+        column_id,
+        model
+    ):
+
+        # ----------------------------------------------------
+        # 结束编辑
+        # ----------------------------------------------------
+
+        if (
+            self._editing_item is item
+            and self._editing_column == column_id
+        ):
+
+            self._editing_item = None
+            self._editing_column = None
+
+        # ----------------------------------------------------
+        # 刷新
+        # ----------------------------------------------------
+
+        self._update_all_cells()
+
+    # ========================================================
+    # Finish current edit
+    # ========================================================
+
+    def _finish_edit(self):
+
+        if self._editing_item is None:
+            return
+
+        item = self._editing_item
+        column = self._editing_column
+
+        # ----------------------------------------------------
+        # 找到当前 field
+        # ----------------------------------------------------
+
+        cell_key = (
+            id(item),
+            column
+        )
+
+        cell_info = self._cell_widgets.get(
+            cell_key
+        )
+
+        if cell_info is not None:
+
+            field = cell_info.get(
+                "field"
+            )
+
+            if field is not None:
+
+                try:
+
+                    # 让 Field 正常结束编辑
+                    field.model.end_edit()
+
+                except Exception:
+                    pass
+
+        # ----------------------------------------------------
+        # 清理状态
+        # ----------------------------------------------------
+
+        self._editing_item = None
+        self._editing_column = None
+
+    # ========================================================
+    # Update label
+    # ========================================================
+
+    @staticmethod
+    def _update_label(
+        model,
+        label
+    ):
+
         label.text = model.as_string
-        if sub_id in self._subscriptions:
-            del self._subscriptions[sub_id]
+
+    # ========================================================
+    # Update color
+    # ========================================================
+
+    def _update_color_preview(
+        self,
+        model,
+        rect
+    ):
+
+        try:
+
+            parts = [
+                float(x.strip())
+                for x in model.as_string.split(",")
+            ]
+
+            if len(parts) >= 3:
+
+                r = max(
+                    0.0,
+                    min(1.0, parts[0])
+                )
+
+                g = max(
+                    0.0,
+                    min(1.0, parts[1])
+                )
+
+                b = max(
+                    0.0,
+                    min(1.0, parts[2])
+                )
+
+                rect.style = {
+                    "background_color": ui.color(
+                        r,
+                        g,
+                        b,
+                        1.0
+                    ),
+                    "border_radius": 3,
+                }
+
+        except Exception as e:
+
+            print(
+                "[TableDelegate] "
+                f"Color parse error: {e}"
+            )
+
+            rect.style = {
+                "background_color": 0xFF888888
+            }
+
+    # ========================================================
+    # Color changed
+    # ========================================================
+
+    def _on_color_changed(
+        self,
+        model,
+        rect,
+        label
+    ):
+
+        self._update_color_preview(
+            model,
+            rect
+        )
+
+        label.text = model.as_string
+
+    # ========================================================
+    # Focus Field
+    # ========================================================
+
+    def _focus_field_next_frame(
+        self,
+        field
+    ):
+
+        import asyncio
+        import omni.kit.app
+
+        async def focus():
+
+            try:
+
+                await (
+                    omni.kit.app
+                    .get_app()
+                    .next_update_async()
+                )
+
+                if field.visible:
+
+                    field.focus_keyboard()
+
+            except Exception as e:
+
+                print(
+                    "[TableDelegate] "
+                    f"Focus error: {e}"
+                )
+
+        asyncio.ensure_future(
+            focus()
+        )
+
+    # ========================================================
+    # Cleanup
+    # ========================================================
+
+    def destroy(self):
+
+        # ----------------------------------------------------
+        # Unsubscribe
+        # ----------------------------------------------------
+
+        for subscription in (
+            self._subscriptions.values()
+        ):
+
+            try:
+                subscription.unsubscribe()
+            except Exception:
+                pass
+
+        self._subscriptions.clear()
+
+        self._cell_widgets.clear()
+
+        self._tree_view = None
+        self._selected_item = None
+        self._editing_item = None
+        self._editing_column = None
 
 
 class RGBColorPickerDialog(ui.Window):
