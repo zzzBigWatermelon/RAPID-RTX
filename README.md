@@ -71,6 +71,14 @@ Double-click RAPID-RTX.exe to run the program.
 - When using RAPID-RTX in your work, please cite:Z. Zhang, Y. Li, C. Liu and H. Huang, "RAPID-RTX: A Novel Real-Time Radiative Transfer and Force Field Modeling Framework for Forest BRF Simulations," in *IEEE Transactions on Geoscience and Remote Sensing*, vol. 63, pp. 1-14, 2025, Art no. 4423214, doi: 10.1109/TGRS.2025.3633556.
 - To cite RAPID-RTX, click on "Cite this repository" in the right sidebar of the [RAPID-RTX GitHub repository](https://github.com/zzzBigWatermelon/RAPID-RTX) landing page and select one of the listed citation entries.
 
+## User Feedback Collection
+
+To better understand our user base and continuously optimize the RAPID-RTX experience, we kindly invite you to fill in your organization and email information:
+
+腾讯表格：https://wj.qq.com/s2/27709907/qq1n/
+
+Google Forms：https://docs.google.com/forms/d/e/1FAIpQLSfe8inyIq1cTnGDcC44UQQwpqRaAJkYBo5U0tkWda7cdiW0bw/viewform?usp=header
+
 ## License
 
 RAPID-RTX is licensed under the Apache License, Version 2.0.  See the LICENSE(RAPID-RTX ) file for details.
