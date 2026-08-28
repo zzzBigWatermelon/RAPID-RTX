@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - [rapid.ExampleScenes]移除 ExampleScenes 扩展以减小存储占用，所有示例场景已迁移至GitHub的USD-Scenes仓库中。
 - [rapid.ReflectanceDatabase] 优化表格编辑交互：将双击进入编辑状态改为单击触发，提升操作灵敏度与响应速度。 
 - [rapid.ReflectanceDatabase] 限制 Name 列为只读：该列值与 CSV 文件名强绑定，禁止修改以防止数据不一致。
+- [rapid.Observation]修复观测目标位置缺失的问题（之前固定为原点，现改为实际目标位置）。修复正射相机（Orthographic）的观测范围、航线计算与定标距离计算逻辑（此前错误地复用了透视相机的计算方式，现已独立适配）。
 
 ### 已知问题
 
