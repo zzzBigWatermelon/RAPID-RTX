@@ -49,16 +49,23 @@ def calculate_constant_altitude_sampling_waypoints(
         pixels=(1920, 1080),
         focal_length=50,
         horizontal_aperture=36,
-        overlap_f_s=[80, 60]):
+        overlap_f_s=[80, 60],
+        sensor_type='Perspective'):
     """
     计算航点列表, 光学第二种恒定高度飞行模拟, 产生在同一水平上的若干航点
     overlap_f_s: [前向重叠率%, 侧向重叠率%] (0-100)
     """
-
+    print('1111111111111111111111111111111111111111111111')
+    print(f'start_point{start_point},end_point{end_point},altitude{altitude},pixels{pixels},focal_length{focal_length}.horizontal_aperture{horizontal_aperture},overlap_f_s{overlap_f_s},sensor_type{sensor_type}')
+    print('1111111111111111111111111111111111111111111111')
     # 1. 调用独立函数计算地面覆盖范围
-    ground_w, ground_h = calculate_footprint_from_camera(
-        focal_length, horizontal_aperture, pixels, altitude
-    )
+    if sensor_type == 'Perspective':
+        ground_w, ground_h = calculate_footprint_from_camera(
+            focal_length, horizontal_aperture, pixels, altitude
+        )
+    elif sensor_type == 'Orthographic':
+        ground_h = horizontal_aperture/10
+        ground_w = ground_h * (pixels[1] / pixels[0])
 
     # 2. 计算步进距离 (Step Distance)
     # 航向步进 (Forward Step): 沿高度方向 H
@@ -74,7 +81,9 @@ def calculate_constant_altitude_sampling_waypoints(
     x_coords = np.arange(min_x, max_x + dist_step_s, dist_step_s)
     y_coords = np.arange(min_y, max_y + dist_step_f, dist_step_f)
 
+    # 存储传感器位置的目标位置
     waypoints = []
+    target_position = []
 
     # 5. 采用弓字型 (S-Curve) 路径
     for i, x in enumerate(x_coords):
@@ -82,8 +91,9 @@ def calculate_constant_altitude_sampling_waypoints(
         current_y_strip = y_coords if i % 2 == 0 else y_coords[::-1]
         for y in current_y_strip:
             waypoints.append((x, y, altitude))
+            target_position.append((x, y, 0))
 
-    return waypoints, (ground_w, ground_h)
+    return waypoints, (ground_w, ground_h), target_position
 
 
 def calculate_semi_circular_sampling_waypoints(
@@ -143,7 +153,12 @@ def calculate_semi_circular_sampling_waypoints(
     # --- 转换为元组列表 ---
     camera_pos_list = [tuple(v for v in point) for point in camera_pos_abs]
     uav_pos_list = [tuple(v for v in point) for point in uav_pos_abs]
-    return camera_pos_list, uav_pos_list
+
+    # 创建一个等长的观测目标位置的列表
+    target_point_tuple = tuple(center)
+    target_pos_list = [target_point_tuple] * len(camera_pos_list)
+
+    return camera_pos_list, uav_pos_list, target_pos_list
 
 
 def calculate_omnidirectional_sampling_waypoints(
@@ -215,7 +230,11 @@ def calculate_omnidirectional_sampling_waypoints(
     camera_pos_list = [tuple(float(v) for v in point) for point in camera_pos_abs]
     uav_pos_list = [tuple(float(v) for v in point) for point in uav_pos_abs]
 
-    return camera_pos_list, uav_pos_list
+    # 创建一个等长的观测目标位置的列表
+    target_point_tuple = tuple(center)
+    target_pos_list = [target_point_tuple] * len(camera_pos_list)
+
+    return camera_pos_list, uav_pos_list, target_pos_list
 
 
 def calculate_airborne_LiDAR_waypoints(start_point: List,

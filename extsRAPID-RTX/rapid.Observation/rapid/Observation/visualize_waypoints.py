@@ -1,5 +1,4 @@
 import numpy as np
-import carb
 import math
 from isaacsim.util.debug_draw import _debug_draw
 

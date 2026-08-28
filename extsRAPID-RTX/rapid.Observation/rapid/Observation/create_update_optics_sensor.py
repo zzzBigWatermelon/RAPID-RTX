@@ -150,9 +150,9 @@ def create_waypoints_visualization(data, obs_type, cmaera_prim, horizontal_apert
         observation_position.append(camera_translate_value)
 
     elif obs_type == 'Constant Altitude Sampling':
-        observation_position, ground_footprint = calculate_constant_altitude_sampling_waypoints(
+        observation_position, ground_footprint, target_position = calculate_constant_altitude_sampling_waypoints(
             data['constant_altitude_sampling_start_point'], data['constant_altitude_sampling_end_point'], data['constant_altitude_sampling_flight_altitude'],
-            pixels, focal_length, horizontal_aperture, data['constant_altitude_sampling_forward_and_side_overlap']
+            pixels, focal_length, horizontal_aperture, data['constant_altitude_sampling_forward_and_side_overlap'], sensor_type
         )
 
     elif obs_type == 'Semi-circular Sampling':

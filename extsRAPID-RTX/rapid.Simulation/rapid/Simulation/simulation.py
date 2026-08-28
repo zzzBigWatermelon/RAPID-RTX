@@ -130,7 +130,10 @@ class Simulation:
     async def __simulation_core(self):
         '''使用replicator的核心模拟步骤'''
         # 观测位置设定
-        observation_position = self.__calculate_observation_position()
+        observation_position, target_position = self.__calculate_observation_position()
+        print('11111111111111111111111111111111111111111111111111111')
+        print(observation_position)
+        print('11111111111111111111111111111111111111111111111111111')
 
         # 计算光源位置，创建新光照
         self.create_and_setup_light()
@@ -171,7 +174,7 @@ class Simulation:
         # 传感器位置变换循环
         for i in range(observation_position_number):
             # 改变传感器位置
-            self.__sensor_motion_control(observation_position, i)
+            self.__sensor_motion_control(observation_position, target_position, i)
             # self.draw.draw_points([observation_position[i]], [(1, 0, 0, 1)], [25])  # 可视化
 
             # 波段变换循环
@@ -443,7 +446,11 @@ class Simulation:
         if self.params['sensor_type'] == 'Perspective':
             self.camera_translate_op.Set(calib_camera_pos)
         if self.params['sensor_type'] == 'Orthographic':
-            self._horizontal_aperture_attr.Set(100.0)  # 定标专用宽度
+            # 定标专用水平光圈宽度
+            # 由透视相机FOV逻辑（add_reflectance_panel）计算的水平光圈宽度不适用正射相机
+            self._horizontal_aperture_attr.Set(100.0)
+            # 定标专用高度，由透视相机FOV逻辑计算的高度不适用正射相机
+            self.camera_translate_op.Set((0, 0, 50))
         custom_prefix = "radiometric_calibration"
         writer.set_custom_name(custom_prefix)
         # 步进定标模拟
@@ -457,6 +464,7 @@ class Simulation:
         if self.params['sensor_type'] == 'Perspective':
             self.camera_translate_op.Set(original_translate_value)
         if self.params['sensor_type'] == 'Orthographic':
+            self.camera_translate_op.Set(original_translate_value)
             self._horizontal_aperture_attr.Set(original_aperture_value)  # 恢复正常宽度
 
     def __cache_stage_elements(self):
@@ -507,34 +515,36 @@ class Simulation:
         if observation_type == 'Single Sampling':
             # 直接读取当前传感器的位置
             observation_position = [self.camera_translate_op.Get()]
+            target_position = (0, 0, 0)
 
         elif observation_type == 'Constant Altitude Sampling':
-            observation_position, ground_footprint = calculate_constant_altitude_sampling_waypoints(
+            observation_position, ground_footprint, target_position = calculate_constant_altitude_sampling_waypoints(
                 self.params['constant_altitude_sampling_start_point'], self.params['constant_altitude_sampling_end_point'], self.params['constant_altitude_sampling_flight_altitude'], self.params['optical_sensor_pixels'],
-                self._focal_length_value_attr.Get(), self._horizontal_aperture_attr.Get(), self.params['constant_altitude_sampling_forward_and_side_overlap']
+                self._focal_length_value_attr.Get(), self._horizontal_aperture_attr.Get(), self.params['constant_altitude_sampling_forward_and_side_overlap'], self.params.get("sensor_type")
             )
 
         elif observation_type == 'Semi-circular Sampling':
-            observation_position, uav_position = calculate_semi_circular_sampling_waypoints(
+            observation_position, uav_position, target_position = calculate_semi_circular_sampling_waypoints(
                 self.params['semicircular_sampling_distance'], self.params['semicircular_sampling_view_azimuth'], self.params['semicircular_sampling_zenith_range'],
                 self.params['semicircular_sampling_zenith_step'], self.params['semicircular_sampling_observation_center']
             )
         elif observation_type == 'Omnidirectional Sampling':
-            observation_position, ground_footprint = calculate_omnidirectional_sampling_waypoints(
+            observation_position, ground_footprint, target_position = calculate_omnidirectional_sampling_waypoints(
                 self.params['omnidirectional_sampling_distance'], self.params['omnidirectional_sampling_view_zenith'],
                 self.params['omnidirectional_sampling_azimuth_step'], self.params['omnidirectional_sampling_observation_center']
             )
-        return observation_position
+        return observation_position, target_position
 
-    def __sensor_motion_control(self, observation_position, frame_idx):
+    def __sensor_motion_control(self, observation_position, target_position, frame_idx):
         # 单次观测不改变位置
         observation_type = self.params['optical_observation_type']
-        camera_position = observation_position[frame_idx]  # 传感器位置
         if observation_type == 'Single Sampling':
             pass
         else:
+            camera_position = observation_position[frame_idx]  # 传感器位置
+            target = target_position[frame_idx]  # 目标位置
             # self.camera_translate_op.Set(camera_position)
-            CameraUtils.set_camera_pose_lookat_quat(self.stage, self.sensor_path, camera_position, (0, 0, 0))
+            CameraUtils.set_camera_pose_lookat_quat(self.stage, self.sensor_path, camera_position, target)
 
     def __radiometric_calibration(self, bands_data):
         '''
