@@ -53,6 +53,13 @@ class RTXLiDAR:
         # 删除上次模拟的中间数据文件
         if Path(self.intermediate_LiDAR_path).exists():
             shutil.rmtree(self.intermediate_LiDAR_path)
+        # 删除本次的replicator文件夹
+        prim = self.stage.GetPrimAtPath('/Replicator')
+        if prim.IsValid():
+            omni.kit.commands.execute(
+                'DeletePrims',
+                paths=[Sdf.Path('/Replicator')],
+                destructive=False)
 
         # LiDAR可视化
         self.visualize = visualize
@@ -100,6 +107,13 @@ class RTXLiDAR:
             self.render_product.destroy()
             if self.visualize:
                 self.render_product_toVisualisation.destroy()
+            # 删除本次的replicator文件夹
+            prim = self.stage.GetPrimAtPath('/Replicator')
+            if prim.IsValid():
+                omni.kit.commands.execute(
+                    'DeletePrims',
+                    paths=[Sdf.Path('/Replicator')],
+                    destructive=False)
 
             # npy缓存转成las格式点云
             npy_to_las(self.intermediate_LiDAR_path)
