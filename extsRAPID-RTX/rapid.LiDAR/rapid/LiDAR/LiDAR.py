@@ -51,7 +51,8 @@ class RTXLiDAR:
         self.result_path = project_validity_check.get_folder("result")
 
         # 删除上次模拟的中间数据文件
-        shutil.rmtree(self.intermediate_LiDAR_path)
+        if Path(self.intermediate_LiDAR_path).exists():
+            shutil.rmtree(self.intermediate_LiDAR_path)
 
         # LiDAR可视化
         self.visualize = visualize
