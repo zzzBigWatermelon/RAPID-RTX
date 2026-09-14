@@ -75,7 +75,7 @@ Double-click RAPID-RTX.exe to run the program.
 
 To better understand our user base and continuously optimize the RAPID-RTX experience, we kindly invite you to fill in your organization and email information:
 
-腾讯表格：https://wj.qq.com/s2/27709907/qq1n/
+腾讯问卷：https://wj.qq.com/s2/27709907/qq1n/
 
 Google Forms：https://docs.google.com/forms/d/e/1FAIpQLSfe8inyIq1cTnGDcC44UQQwpqRaAJkYBo5U0tkWda7cdiW0bw/viewform?usp=header
 
