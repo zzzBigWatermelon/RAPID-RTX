@@ -11,6 +11,7 @@ import asyncio
 import numpy as np
 import math
 from pathlib import Path
+import shutil
 from typing import Dict, List
 
 # 自定义模块
@@ -48,6 +49,9 @@ class RTXLiDAR:
         intermediate_path = project_validity_check.get_folder("intermediate_data")
         self.intermediate_LiDAR_path = str(Path(intermediate_path) / "LiDAR")
         self.result_path = project_validity_check.get_folder("result")
+
+        # 删除上次模拟的中间数据文件
+        shutil.rmtree(self.intermediate_LiDAR_path)
 
         # LiDAR可视化
         self.visualize = visualize
@@ -249,6 +253,8 @@ class RTXLiDAR:
         载体的tick频率reportRateBaseHz=每圈的tick数/ Rotate一圈的时间.
         而LiDAR的scanRateBaseHz没有了意义,配合LiDAR的reportRateBaseHz实现一圈一次tick,所以scanRateBaseHz=reportRateBaseHz
         '''
+        # 这里强行增加地基的水平分辨率
+        horizontal_angle_resolution = horizontal_angle_resolution/15
         # --------------------------计算属性--------------------------
         # --- 1. 坐标系转换 (天顶角 -> LiDAR内置角度) ---
         lidar_start = 90.0 - vertical_start_angle
@@ -268,8 +274,9 @@ class RTXLiDAR:
 
         # 水平角度数量=载体每圈tick数量
         # horizontal_angle = np.arange(horizontal_end_angle, horizontal_start_angle+horizontal_angle_resolution, horizontal_angle_resolution).tolist()
-        tick_number_per_scan = (abs(horizontal_start_angle) +
-                                abs(horizontal_end_angle))/horizontal_angle_resolution
+        tick_number_per_scan = (abs(horizontal_start_angle)
+                                + abs(horizontal_end_angle)) / horizontal_angle_resolution
+
         # 扫描时间参数
         total_scanning_time = (vertical_angle_number*tick_number_per_scan)/sampling_frequency  # Rotate一圈的时间
         reportRateBaseHz = tick_number_per_scan/total_scanning_time

@@ -132,7 +132,7 @@ class ReflectanceDatabaseWindow(ui.Window):
                 # 添加功能按钮
                 with ui.HStack(height=30):
                     ui.Spacer()
-                    ui.Button("Refresh",  width=180, clicked_fn=self._on_refresh_clicked)
+                    ui.Button("Refresh to Scene",  width=180, clicked_fn=self._on_refresh_clicked)
                     ui.Button("Delete", clicked_fn=self._on_del_clicked)
                     ui.Button("Plot",  width=180, clicked_fn=None)
                     ui.Spacer()

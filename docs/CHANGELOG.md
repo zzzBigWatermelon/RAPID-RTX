@@ -2,6 +2,16 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.2] - 2026-8-26
+
+### 修复
+
+- [rapid.LiDAR]修复了因为上次模拟的缓存数据没有删除导致之后和LiDAR数据合成总是有之前扫描的结果。
+
+### 已知问题
+
+- [rapid.LiDAR]水平角度分辨率总是不对，总是小于设定的分辨率。
+
 ## [1.0.0] - 2026-8-26
 
 ### 新增

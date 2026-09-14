@@ -325,9 +325,14 @@ class DistributionUtils:
             xformable.AddTranslateOp().Set(Gf.Vec3d(x, y, z))
 
             # 设定随机旋转
-            align_rot = Gf.Rotation(Gf.Vec3d(0, 0, 1), Gf.Vec3d(nx, ny, nz))
+            # 这个垂直地面面元的旋转代码
+            # align_rot = Gf.Rotation(Gf.Vec3d(0, 0, 1), Gf.Vec3d(nx, ny, nz))
+            # yaw_rot = Gf.Rotation(Gf.Vec3d(0, 0, 1), random.uniform(0, 360))
+            # xformable.AddOrientOp().Set(Gf.Quatf((yaw_rot * align_rot).GetQuat()))
+            # 仅绕 Z 轴进行随机旋转，确保结果一定垂直 XY 平面
             yaw_rot = Gf.Rotation(Gf.Vec3d(0, 0, 1), random.uniform(0, 360))
-            xformable.AddOrientOp().Set(Gf.Quatf((yaw_rot * align_rot).GetQuat()))
+            # 直接应用该水平旋转的四元数
+            xformable.AddOrientOp().Set(Gf.Quatf(yaw_rot.GetQuat()))
 
             # 设定随机缩放
             s = random.uniform(0.9, 1.1)

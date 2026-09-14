@@ -56,7 +56,7 @@ Double-click RAPID-RTX.exe to run the program.
 - **⚠️Note:** A known issue exists where driver version 595.xx on Blackwell GPUs may experience crashes.
 - [rapid.Tool]->Image Data Viewer: After switching image paths, the Image Data Viewer window requires switching bands to read images from the new path.
 - [rapid.LiDAR] The spaceborne large-spot lidar simulation does not include noise algorithms, resulting in a smooth energy curve.
-- [rapid.LiDAR] Ground-based LiDAR simulations always lack the last two frames of data; this is due to an asynchronous code issue.
+- [rapid.LiDAR] Terrestrial LiDAR simulations always lack the last two frames of data; this is due to an asynchronous code issue.The horizontal angular resolution of terrestrial LiDAR does not always match the set value.
 - [rapid.ReflectanceDarabase] The plot button in the ReflectanceDarabase window is not bound to any actual function; the selected reflectance table data is plotted as a spectral line.
 
 ## Support

@@ -48,7 +48,7 @@ nvidia_api_key = "placeholder"
 nice_name = "DeepSeek"
 base_url = "https://api.deepseek.com/v1"
 model = "deepseek-v4-flash"
-api_key = "YOUR_DEEPSEEK_API_KEY"
+api_key = "Your depseek key"
 
 
 # Use omni.ui to build simple UI

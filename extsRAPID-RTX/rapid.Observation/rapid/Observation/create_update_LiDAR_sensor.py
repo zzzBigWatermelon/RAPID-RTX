@@ -37,6 +37,7 @@ async def create_LiDAR_carrier(data):
     set_prim_attributes(lidar_carrier_prim, sensor_type, data)
 
     # 计算航线的起始点
+    waypoints_list = []
     if sensor_type == "Airborne LiDAR":
         waypoints_pairs = calculate_airborne_LiDAR_waypoints(data["airborne_LiDAR_start_point"], data["airborne_LiDAR_end_point"],
                                                              data["airborne_LiDAR_flight_altitude"], data["airborne_LiDAR_strip_overlap"], data["airborne_LiDAR_fov"])
